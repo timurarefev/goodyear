@@ -1,4 +1,10 @@
-﻿(function($){
+﻿/*
+ * Goodyear 1.0
+ * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
+ * 2014
+ */
+ 
+(function($){
   jQuery.fn.goodyear = function(options){
 
     options = $.extend({
@@ -1585,23 +1591,38 @@
 		
 		string_to_date : function(string){
 			
-			for (k = 0; k < presets.common_date_formats.length; k++)
+            for (i = 0; i < presets.common_date_langs.length; i++)
 			{
-				for (i = 0; i < presets.common_date_langs.length; i++)
-				{
-					var parsed_date = moment(methods.trim(string), presets.common_date_formats[k], presets.common_date_langs[i], (k < 2));
-					
-					if (parsed_date.isValid())
-					{
-						break;
-					};
-				};
-				
-				if (parsed_date.isValid())
-				{
-					break;
-				};
-			};
+                var parsed_date = moment(methods.trim(string), options.format, presets.common_date_langs[i], true);
+                
+                if (parsed_date.isValid())
+    			{
+	                break;
+    			};
+            };
+            
+            if (!parsed_date.isValid())
+            {
+                
+    			for (k = 0; k < presets.common_date_formats.length; k++)
+    			{
+    				for (i = 0; i < presets.common_date_langs.length; i++)
+    				{
+    					var parsed_date = moment(methods.trim(string), presets.common_date_formats[k], presets.common_date_langs[i], (k < 2));
+    					
+    					if (parsed_date.isValid())
+    					{
+    						break;
+    					};
+    				};
+    				
+    				if (parsed_date.isValid())
+    				{
+    					break;
+    				};
+    			};
+                
+            };
 			
 			if (parsed_date.isValid())
 			{
@@ -1812,12 +1833,16 @@ $(document).ready(function(){
 	var find_script_path = new RegExp('^(.*?)[^/]*?$', "i");
 	
 	var script_path = false;
-	
+    
+    var script_block = false;
+    
 	$("script").filter("[src*='goodyear']").each(function(){
 		
 		if (is_goodyear_script.test($(this).attr("src")))
 		{
 			script_path = find_script_path.exec($(this).attr("src"))[1];
+            
+            script_block = $(this);
 		};
 		
 	});
@@ -1825,21 +1850,13 @@ $(document).ready(function(){
 	if (script_path)
 	if (typeof(moment) == "undefined")
 	{		
-		$.ajax({
-			"url" : script_path + "moment-with-langs.min.js", 
-			"cache" : true,
-			"async" : false
-		});		
+		$("<script src='"+script_path + "moment-with-langs.min.js'></script>").insertAfter(script_block);	
 	};
 	
 	if (script_path)
 	if (!jQuery().mousewheel)
 	{	
-		$.ajax({
-			"url" : script_path + "jquery-mousewheel-3.1.11.min.js", 
-			"cache" : true,
-			"async" : false
-		});		
+		$("<script src='"+script_path + "jquery-mousewheel-3.1.11.min.js'></script>").insertAfter(script_block);	
 	};
 		
 	$(".goodyear").each(function(){
