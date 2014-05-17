@@ -69,6 +69,11 @@
 	right:0px;
 }
 
+.goodyear-container .goodyear-picker.goodyear-add-hour-picker,
+.goodyear-container .goodyear-picker.goodyear-add-minute-picker{
+    width:379px;
+}
+
 .goodyear-container .goodyear-picker .goodyear-date-picker-label{
 	font-family:Helvetica, Arial, sans-serif;
 	font-size:10px;
@@ -160,6 +165,10 @@
     top: 0;
 }
 
+.goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-label.disabled{
+    color:#ccc;
+}
+
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-line_1,
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-line_2,
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-line_3,
@@ -177,6 +186,7 @@
 	position:relative;
 	float:left;
 	overflow:hidden;
+    color:#000;
 }
 
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-weekdays span.hover{
@@ -196,6 +206,11 @@
 
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-weekend .goodyear-slide_line span{
 	color:#c73d05;	
+}
+
+.goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-weekend .goodyear-slide_line span.disabled{
+    cursor: default;
+    color:#ccc;
 }
 
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-weekend span.hover{
@@ -226,6 +241,11 @@
 	position:relative;
 }
 
+.goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-slide_line span.disabled{
+    cursor: default;
+    color:#ccc;
+}
+
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-slide_line span .bull{
 	display:none;
     left: 0;
@@ -252,7 +272,9 @@
 }
 
 .goodyear-container .goodyear-picker .goodyear-month-picker,
-.goodyear-container .goodyear-picker .goodyear-year-picker{
+.goodyear-container .goodyear-picker .goodyear-year-picker,
+.goodyear-container .goodyear-picker .goodyear-hour-picker,
+.goodyear-container .goodyear-picker .goodyear-minute-picker{
     height: 240px;
     left: 194px;
     position: absolute;
@@ -272,7 +294,24 @@
 	border-left:1px solid #E5E5E5;
 }
 
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years-floating-block{
+.goodyear-container .goodyear-picker .goodyear-hour-picker{
+	height:269px;
+	top:0px;
+	left:318px;
+	width:30px;
+	border-left:1px solid #E5E5E5;
+}
+
+.goodyear-container .goodyear-picker .goodyear-minute-picker{
+	height:269px;
+	top:0px;
+	left:349px;
+	width:30px;
+}
+
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years-floating-block,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hours-floating-block,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minutes-floating-block{
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -286,7 +325,9 @@
 	margin-left:2px;
 }
 
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-current-year-selection{
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-current-year-selection,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-current-hour-selection,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-current-minute-selection{
 	height:32px;
 	width:61px;
 	border-bottom:1px solid #e5e5e5;
@@ -297,11 +338,37 @@
 	top:119px;
 }
 
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-current-hour-selection{
+    width:30px;
+}
+
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-current-minute-selection{
+    width:30px;
+}
+
 .goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years{
 	position:absolute;
 	top:0px;
 	left:0px;
 	width:61px;
+	height:269px;
+	overflow:hidden;	
+}
+
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hours{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:30px;
+	height:269px;
+	overflow:hidden;	
+}
+
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minutes{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:30px;
 	height:269px;
 	overflow:hidden;	
 }
@@ -325,7 +392,9 @@
 	display:inline;
 }
 
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-year{
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-year,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hour,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minute{
 	font-family:Helvetica, Arial, sans-serif;
 	font-size:13px;
 	height:32px;
@@ -335,16 +404,44 @@
 	padding-left:12px;
 }
 
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-current-year-selection .goodyear-year{
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hour{
+    padding-right:6px;
+    padding-left:0px;
+    text-align: right;
+}
+
+.goodyear-container .goodyear-picker .goodyear-time-divider{
+    font-family:Helvetica, Arial, sans-serif;
+	font-size:13px;
+	height:32px;
+	line-height:32px;
+	color:#000;
+    top:120px;
+    position:absolute; 
+    left:347px;
+    text-align:center;
+}
+
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minute{
+    padding-left:6px;
+}
+
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-current-year-selection .goodyear-year,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-current-hour-selection .goodyear-hour,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-current-minute-selection .goodyear-minute{
 	color:#000;
 }
 
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years .goodyear-year span{
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years .goodyear-year span,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hours .goodyear-hour span,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minutes .goodyear-minute span{
 	cursor:pointer;
 }
 
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-months .goodyear-month.hover,
-.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years .goodyear-year span.hover{
+.goodyear-container .goodyear-picker .goodyear-year-picker .goodyear-years .goodyear-year span.hover,
+.goodyear-container .goodyear-picker .goodyear-hour-picker .goodyear-hours .goodyear-hour span.hover,
+.goodyear-container .goodyear-picker .goodyear-minute-picker .goodyear-minutes .goodyear-minute span.hover{
 	color: #D04000;
 	transition: color 0s ease 0s;
 }
@@ -391,9 +488,15 @@
 .goodyear-container .goodyear-picker .goodyear-year-picker,
 .goodyear-container .goodyear-picker .goodyear-year-picker.drag,
 .goodyear-container .goodyear-picker .goodyear-year-picker.goodyear-drag_started .goodyear-years .goodyear-year span,
+.goodyear-container .goodyear-picker .goodyear-hour-picker,
+.goodyear-container .goodyear-picker .goodyear-hour-picker.drag,
+.goodyear-container .goodyear-picker .goodyear-hour-picker.goodyear-drag_started .goodyear-hours .goodyear-hour span,
+.goodyear-container .goodyear-picker .goodyear-minute-picker,
+.goodyear-container .goodyear-picker .goodyear-minute-picker.drag,
+.goodyear-container .goodyear-picker .goodyear-minute-picker.goodyear-drag_started .goodyear-minutes .goodyear-minute span,
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-slider,
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-slider *,
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-slider .goodyear-months .goodyear-month,
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-slider .goodyear-months .goodyear-month *{
-cursor:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF////ICAg////GLAKQwAAAAN0Uk5T//8A18oNQQAAAExJREFUeNpsz4EOABAIBNA7///R0lWElk2vCRgKMjZQQYAyAy9sWb5AHVHlzg4rY6SHQ0xAGdXJ2oYebUGTGzjyHR32tfG5ki9MAQYAekwA06CYM+gAAAAASUVORK5CYII=) 16 16, grab;
+cursor:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK9JREFUeNrsVwEKgCAM1PAh+v9H+ZTVICEl6C4ViXYgzop5brdVXkTcSmxuMYyAETACXQRSSqKjx0dgN9Q55+zVPubqerlHMdBOiIwYoxSo3a4bG/Y7TQNoamACZ9iL/bi5PoOQmBKBJ4K0Bi45r7RwB1YPAcnlndqHnJ5NAeNc9QKVJFuCKNBy3NgK+MS7AA7/2z4wFEzbJMpwXiseHYnl3wPe/guMgBH4PYFdgAEASNDHXxsneMIAAAAASUVORK5CYII=) 16 16, grab;
 }

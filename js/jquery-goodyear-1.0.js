@@ -58,7 +58,7 @@
 			return "\
 			<div class='goodyear-container'>\
 			<div class='goodyear-icon'></div>\
-			<div class='goodyear-picker'>\
+			<div class='goodyear-picker"+(options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "")+"'>\
 				<div class='goodyear-date-picker'>\
 					<div class='goodyear-slider'>\
 						"+templates.days()+"\
@@ -96,8 +96,64 @@
 						</div>\
 					</div>\
 				</div>\
+                " + (options.hour_picker ? "\
+                <div class='goodyear-hour-picker'>\
+					<div class='goodyear-hours'>\
+						<div class='goodyear-hours-floating-block'>\
+							"+templates.hours()+"\
+						</div>\
+					</div>\
+					<div class='goodyear-current-hour-selection'>\
+						<div class='goodyear-hours-floating-block'>\
+							"+templates.hours()+"\
+						</div>\
+					</div>\
+				</div>\
+                \
+                <div class='goodyear-minute-picker'>\
+                    " + (options.minute_picker ? "\
+					<div class='goodyear-minutes'>\
+						<div class='goodyear-minutes-floating-block'>\
+							"+templates.minutes()+"\
+						</div>\
+					</div>\
+                    " : "") + "\
+					<div class='goodyear-current-minute-selection'>\
+						<div class='goodyear-minutes-floating-block'>\
+							"+(options.minute_picker ? templates.minutes() : "<div class='goodyear-minute'><span>00</span></div>")+"\
+						</div>\
+					</div>\
+				</div>\
+                <div class='goodyear-time-divider'>\
+                :\
+                </div>\
+                " : "") + "\
 			</div>\
 			</div>";			
+		},
+        
+        hours : function(){
+			
+			var text = "";
+			
+			for (i = 0; i < 24; i++)
+			{
+				text += "<div class='goodyear-hour'><span>" + (i < 10 ? "0" : "") + i + "</span></div>";
+			};
+			
+			return text;
+		},
+        
+        minutes : function(){
+			
+			var text = "";
+			
+			for (i = 0; i < 60; i = i + 5)
+			{
+				text += "<div class='goodyear-minute'><span>" + (i < 10 ? "0" : "") + i + "</span></div>";
+			};
+			
+			return text;
 		},
 		
 		years : function(min_year, max_year){
@@ -279,7 +335,7 @@
 								<span date='28'>28</span>\
 								<span date='29' "+(days_count < 29 ? "style='display:none'" : "")+">29</span>\
 								<span date='30' "+(days_count < 30 ? "style='display:none'" : "")+">30</span>\
-								<span date='d31' "+(days_count < 31 ? "style='display:none'" : "")+">31</span>\
+								<span date='31' "+(days_count < 31 ? "style='display:none'" : "")+">31</span>\
 							</div>\
 						</div>\
 					</div>\
@@ -310,16 +366,17 @@
 		months_ru_short : ["янв", "фев", "мар", "апр", "май", "июнь", "июль", "авг", "сен", "окт", "ноя", "дек"],
 		months_ru_genitive : ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
 		days_of_week : ["П", "В", "С", "Ч", "П", "С", "В"],
-		common_date_formats : [["D M", "DD M", "DD MM", "D-M", "DD-M", "DD-MM","D.M", "DD.M", "DD.MM","D\\M", "DD\\M", "DD\\MM","D/M", "DD/M", "DD/MM", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "YY M D", "YY M DD", "YY MM DD","YYYY M D", "YYYY M DD", "YYYY MM DD", "YY-M-D", "YY-M-DD", "YY-MM-DD","YYYY-M-D", "YYYY-M-DD", "YYYY-MM-DD", "YY.M.D", "YY.M.DD", "YY.MM.DD","YYYY.M.D", "YYYY.M.DD", "YYYY.MM.DD", "YY\\M\\D", "YY\\M\\DD", "YY\\MM\\DD","YYYY\\M\\D", "YYYY\\M\\DD", "YYYY\\MM\\DD", "YY/M/D", "YY/M/DD", "YY/MM/DD","YYYY/M/D", "YYYY/M/DD", "YYYY/MM/DD", "YY D M", "YY DD M", "YY DD MM","YYYY D M", "YYYY DD MM", "YYYY DD MM", "YY-D-M", "YY-DD-M", "YY-DD-MM","YYYY-D-M", "YYYY-DD-MM", "YYYY-DD-MM", "YY.D.M", "YY.DD.M", "YY.DD.MM","YYYY.D.M", "YYYY.DD.MM", "YYYY.DD.MM", "YY\\D\\M", "YY\\DD\\M", "YY\\DD\\MM","YYYY\\D\\M", "YYYY\\DD\\MM", "YYYY\\DD\\MM", "YY/D/M", "YY/DD/M", "YY/DD/MM","YYYY/D/M", "YYYY/DD/MM", "YYYY/DD/MM", "D MMM", "DD MMM"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY", "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "D MMM", "DD MMM"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY",   "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM"]],
+		common_date_formats : [["D M", "DD M", "DD MM", "D-M", "DD-M", "DD-MM","D.M", "DD.M", "DD.MM","D\\M", "DD\\M", "DD\\MM","D/M", "DD/M", "DD/MM", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "YY M D", "YY M DD", "YY MM DD","YYYY M D", "YYYY M DD", "YYYY MM DD", "YY-M-D", "YY-M-DD", "YY-MM-DD","YYYY-M-D", "YYYY-M-DD", "YYYY-MM-DD", "YY.M.D", "YY.M.DD", "YY.MM.DD","YYYY.M.D", "YYYY.M.DD", "YYYY.MM.DD", "YY\\M\\D", "YY\\M\\DD", "YY\\MM\\DD","YYYY\\M\\D", "YYYY\\M\\DD", "YYYY\\MM\\DD", "YY/M/D", "YY/M/DD", "YY/MM/DD","YYYY/M/D", "YYYY/M/DD", "YYYY/MM/DD", "YY D M", "YY DD M", "YY DD MM","YYYY D M", "YYYY DD MM", "YYYY DD MM", "YY-D-M", "YY-DD-M", "YY-DD-MM","YYYY-D-M", "YYYY-DD-MM", "YYYY-DD-MM", "YY.D.M", "YY.DD.M", "YY.DD.MM","YYYY.D.M", "YYYY.DD.MM", "YYYY.DD.MM", "YY\\D\\M", "YY\\DD\\M", "YY\\DD\\MM","YYYY\\D\\M", "YYYY\\DD\\MM", "YYYY\\DD\\MM", "YY/D/M", "YY/DD/M", "YY/DD/MM","YYYY/D/M", "YYYY/DD/MM", "YYYY/DD/MM", "D MMM", "DD MMM", "D M HH:mm", "DD M HH:mm", "DD MM HH:mm", "D-M HH:mm", "DD-M HH:mm", "DD-MM HH:mm","D.M HH:mm", "DD.M HH:mm", "DD.MM HH:mm","D\\M HH:mm", "DD\\M HH:mm", "DD\\MM HH:mm","D/M HH:mm", "DD/M HH:mm", "DD/MM HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "YY M D HH:mm", "YY M DD HH:mm", "YY MM DD HH:mm","YYYY M D HH:mm", "YYYY M DD HH:mm", "YYYY MM DD HH:mm", "YY-M-D HH:mm", "YY-M-DD HH:mm", "YY-MM-DD HH:mm","YYYY-M-D HH:mm", "YYYY-M-DD HH:mm", "YYYY-MM-DD HH:mm", "YY.M.D HH:mm", "YY.M.DD HH:mm", "YY.MM.DD HH:mm","YYYY.M.D HH:mm", "YYYY.M.DD HH:mm", "YYYY.MM.DD HH:mm", "YY\\M\\D HH:mm", "YY\\M\\DD HH:mm", "YY\\MM\\DD HH:mm","YYYY\\M\\D HH:mm", "YYYY\\M\\DD HH:mm", "YYYY\\MM\\DD HH:mm", "YY/M/D HH:mm", "YY/M/DD HH:mm", "YY/MM/DD HH:mm","YYYY/M/D HH:mm", "YYYY/M/DD HH:mm", "YYYY/MM/DD HH:mm", "YY D M HH:mm", "YY DD M HH:mm", "YY DD MM HH:mm","YYYY D M HH:mm", "YYYY DD MM HH:mm", "YYYY DD MM HH:mm", "YY-D-M HH:mm", "YY-DD-M HH:mm", "YY-DD-MM HH:mm","YYYY-D-M HH:mm", "YYYY-DD-MM HH:mm", "YYYY-DD-MM HH:mm", "YY.D.M HH:mm", "YY.DD.M HH:mm", "YY.DD.MM HH:mm","YYYY.D.M HH:mm", "YYYY.DD.MM HH:mm", "YYYY.DD.MM HH:mm", "YY\\D\\M HH:mm", "YY\\DD\\M HH:mm", "YY\\DD\\MM HH:mm","YYYY\\D\\M HH:mm", "YYYY\\DD\\MM HH:mm", "YYYY\\DD\\MM HH:mm", "YY/D/M HH:mm", "YY/DD/M HH:mm", "YY/DD/MM HH:mm","YYYY/D/M HH:mm", "YYYY/DD/MM HH:mm", "YYYY/DD/MM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY", "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "D MMM", "DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm", "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY",   "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm",   "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm"]],
 		common_date_langs : ["ru", "en"]
 	};
 	
 	var states = {
-		
 		input_text_value : null, //текущая запись в input'e
 		selected_date : null, //выбранная дата в формате moment
 		today : null, //сегодня в формате moment
 		displayed_year : null, //отображаемый в данный момент год
+        selected_hour : null, //выбранный в данный момент час
+        selected_minute : null, //выбранная в данный момент минута
 		container : null, //контейнер со всем содержимым
 		drag_item : null, //перетягиваемый в данный момент элемент
 		drag_start_pos_y : null, // начальное состояние при перетягивании
@@ -452,18 +509,67 @@
 			*/
 		  
 			methods.year_mousewheel();
+            
+            /*
+				Подсветка часа при наведении
+			*/
+			
+			methods.hour_mouseenter();
+            
+            /*
+				Клик по часу
+			*/
+		  
+			methods.hour_click();
+            
+            /*
+				Перетягивание часа
+			*/
+		  
+			methods.hour_drag();
+            
+            /*
+				Прокрутка часа мышью
+			*/
+		  
+			methods.hour_mousewheel();
+          
+            /*
+				Подсветка минуты при наведении
+			*/
+			
+			methods.minute_mouseenter();
+            
+            /*
+				Клик по минуте
+			*/
+		  
+			methods.minute_click();
+            
+            /*
+				Перетягивание минуты
+			*/
+		  
+			methods.minute_drag();
+            
+            /*
+				Прокрутка часа мышью
+			*/
+		  
+			methods.minute_mousewheel();
 
 			/*
 				Подсветка даты при наведении
 			*/
-		  
+          
 			methods.date_hover();
+            
 		  
 			/*
 				Выбор даты
 			*/
 		  
-			methods.date_pick(container);
+			methods.date_pick();
 			
 		},
 		
@@ -598,6 +704,74 @@
 		  	date_slider.find(".goodyear-month").find("span").filter(".active").removeClass("active");
 		  
 		  	date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[states.selected_date.format("M") - 1]).find("span").filter("[date='"+states.selected_date.format("D")+"']").addClass("hover").addClass("active").removeClass("hover");
+            
+            /*
+                Если можно выбирать час
+            */
+            
+            if (options.hour_picker)
+            {
+              
+                previous_selected_hour = states.selected_hour;
+              
+                states.selected_hour = states.selected_date.hour();
+              
+                var hour_picker = states.container.find(".goodyear-hour-picker");
+			
+    			var single_hour_items_count_from_top = parseInt(states.selected_hour, 10);
+                
+    			var hour_picker_floating_block_top = - (single_hour_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+                
+                hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").stop(true, true);
+			
+    			hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").animate({
+    				"top" : hour_picker_floating_block_top + "px"
+    			}, {
+    				duration: Math.abs(states.selected_hour - previous_selected_hour)*50,
+    				step: function( now, fx ) {	
+    				
+    					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top", now);			
+    				
+    					hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+    							
+    				}
+    			});
+                
+            };
+            
+            /*
+                Если можно выбирать минуту
+            */
+            
+            if (options.minute_picker)
+            {
+                
+                previous_selected_minute = states.selected_minute;
+              
+                states.selected_minute = Math.round(states.selected_date.minute() / 5) * 5;
+              
+                var minute_picker = states.container.find(".goodyear-minute-picker");
+			
+    			var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / 5;
+                
+                var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+                
+                minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").stop(true, true);
+			
+    			minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").animate({
+    				"top" : minute_picker_floating_block_top + "px"
+    			}, {
+    				duration: Math.abs(states.selected_minute - previous_selected_minute)*10,
+    				step: function( now, fx ) {	
+    				
+    					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top", now);			
+    				
+    					minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+    							
+    				}
+    			});
+                
+            };
 			
 		},
 		
@@ -684,10 +858,30 @@
 						
 					}
 				});
+                
+                var current_month_disabled = true;
 
-				for (day = 29; day <= 31; day++)
+				for (day = 1; day <= 31; day++)
 				{
-
+                    
+                    var current_date = moment([states.displayed_year, month_num, day]);
+                    
+                    if (
+                        (!options.min_date || current_date >= options.min_date) &&
+                        (!options.max_date || current_date <= options.max_date)
+                    )
+                    {
+                        date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").removeClass("disabled");
+                        
+                        if (day <= days_count)
+                        current_month_disabled = false;
+                    } else
+                    {   
+                        date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").addClass("disabled");                        
+                    };
+                    
+                    options.min_date
+                    
 					if (day <= days_count)
 					{
 						date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "inline");
@@ -697,6 +891,18 @@
 					};
 					
 				};
+                
+                if (current_month_disabled)
+                {
+                  
+                    date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").addClass("disabled");
+                    
+                } else
+                {
+                   
+                    date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").removeClass("disabled"); 
+                    
+                };
 				
 			});
 					  
@@ -806,16 +1012,26 @@
 				var selected_date = methods.string_to_date($(this).val());
 				
 				states.input_text_value = $(this).val();
-				
-				if (!selected_date)
+                
+				if (
+                    !selected_date || 
+                    (
+                        selected_date && 
+                        (
+                            selected_date.year() < options.min_year || 
+                            selected_date.year() > options.max_year || 
+                            selected_date < options.min_date ||
+                            selected_date > options.max_date
+                        )
+                    )
+                )
 				{
 					states.container.addClass("goodyear-error");
 					
 					states.input_text_error = true;					
-				} else				
-				if (selected_date && (selected_date.format("YYYY") >= options.min_year && selected_date.format("YYYY") <= options.max_year))
-				{
-					states.selected_date = selected_date;
+				} else
+				{                    
+					states.selected_date = selected_date;                    
 					states.input_text_value = states.selected_date.format(options.format);
 					methods.set_date();
 					states.container.find(".goodyear-text").val(states.input_text_value);
@@ -1234,8 +1450,8 @@
 						if (year_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
 						year_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
 						
-						if (year_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - 2*block_model.year_selection_border_top) + year_picker_floating_block_height)
-						year_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - 2*block_model.year_selection_border_top) + year_picker_floating_block_height;
+						if (year_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + year_picker_floating_block_height)
+						year_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + year_picker_floating_block_height;
 						
 						year_picker.find(".goodyear-years-floating-block").css("top", year_picker_floating_block_top);
 						
@@ -1256,7 +1472,7 @@
 				{
 					
 					states.displayed_year = options.min_year + Math.round(Math.abs((parseInt(year_picker.find(".goodyear-years-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
-					
+                    
 					/*
 						Устанавливаем значение годов
 					*/
@@ -1434,8 +1650,8 @@
 					if (year_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
 					year_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
 					
-					if (year_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - 2*block_model.year_selection_border_top) + year_picker_floating_block_height)
-					year_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - 2*block_model.year_selection_border_top) + year_picker_floating_block_height;
+					if (year_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + year_picker_floating_block_height)
+					year_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + year_picker_floating_block_height;
 					
 					year_picker.find(".goodyear-years").find(".goodyear-years-floating-block").css("top", year_picker_floating_block_top);
 					
@@ -1486,6 +1702,576 @@
 				});
 			};
 		},
+        
+        /*
+	  		Наведение на час
+	  	*/
+	  
+		hour_mouseenter : function(container){
+			  
+			states.container.find(".goodyear-hour-picker").children().filter(".goodyear-hours").find(".goodyear-hour").find("span").unbind("mouseenter");
+			
+			states.container.find(".goodyear-hour-picker").children().filter(".goodyear-hours").find(".goodyear-hour").find("span").mouseenter(function(){
+			  
+				$(this).addClass("hover");
+			  
+			}).mouseleave(function(){
+			  
+				$(this).removeClass("hover");
+							  
+			});
+			
+		},
+
+		/*
+			Клик по часу
+		*/
+		
+		hour_click : function()
+		{
+		  
+			var hour_picker = states.container.find(".goodyear-hour-picker");
+		  
+			states.container.find(".goodyear-hour-picker").children().filter(".goodyear-hours").find(".goodyear-hour").find("span").unbind("click");  
+			states.container.find(".goodyear-hour-picker").children().filter(".goodyear-hours").find(".goodyear-hour").find("span").click(function(){
+				
+				if (!states.drag_started)
+				{				
+					var prev_selected_hour = states.selected_hour;
+					
+					states.selected_hour = parseInt($(this).text(), 10);
+					
+					/*
+						Устанавливаем значение годов
+					*/
+					
+					var single_hour_items_count_from_top = parseInt(states.selected_hour, 10);
+					
+					var hour_picker_floating_block_top = - (single_hour_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").stop(true, true);
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").animate({
+						"top" : hour_picker_floating_block_top + "px"
+					}, {
+						duration: Math.abs(prev_selected_hour - states.selected_hour) * 50,
+						step: function( now, fx ) {		
+						
+							hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top", now);				
+						
+							hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+									
+						}
+					});
+                    
+                    states.selected_date.hour(states.selected_hour);
+                    
+                    states.input_text_value = states.selected_date.format(options.format);
+            
+                    states.container.find(".goodyear-text").val(states.input_text_value);
+					
+				};
+				  
+			});
+			
+		},
+        
+        /*
+			Перетягивание года
+		*/
+		
+		hour_drag : function (){
+		
+			var hour_picker = states.container.find(".goodyear-hour-picker");
+			
+			hour_picker.stop(true, true);
+			
+			hour_picker.mousedown(function(event){
+				
+				states.drag_started = false;
+				
+				hour_picker.removeClass("drag_started");
+				
+				states.drag_item = hour_picker;
+				
+				states.drag_start_pos_y = event.pageY;
+				
+				states.drag_start_element_top = parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10);
+				
+				$("html, body").addClass("disable_selection");
+				
+				$("html").mousemove(function(event){
+				
+					if (states.drag_item == hour_picker)
+					{												
+						states.drag_started = true;
+						
+						hour_picker.addClass("goodyear-drag_started");
+						
+						var difference_y = (states.drag_start_pos_y - event.pageY);
+						
+						var hour_picker_floating_block_top = states.drag_start_element_top - difference_y;
+						
+						var single_hour_items_count_from_top = parseInt(states.selected_date.format("YYYY"), 10) - options.min_hour;
+						
+						var hour_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*(options.max_hour - options.min_hour + 1);
+						
+						if (hour_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
+						hour_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
+						
+						if (hour_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height)
+						hour_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height;
+						
+						hour_picker.find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top);
+						
+						hour_picker.find(".goodyear-hours-floating-block").data("top", hour_picker_floating_block_top);	
+												
+						hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");	
+						
+					};
+				
+				});
+			});
+            
+            states.container.add(document).mouseup(function(e){
+
+				e.stopPropagation();
+				
+				if (states.drag_item == hour_picker)
+				{
+					
+					states.selected_hour = Math.round(Math.abs((parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
+                    
+					/*
+						Устанавливаем значение годов
+					*/
+					
+					var single_hour_items_count_from_top = states.selected_hour;
+					
+					var hour_picker_floating_block_top = - (single_hour_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").stop(true, true);
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").animate({
+						"top" : hour_picker_floating_block_top + "px"
+					}, {
+						duration: 200,
+						step: function( now, fx ) {	
+						
+							hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top", now);				
+						
+							hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+									
+						}
+					});
+                    
+                    states.selected_date.hour(states.selected_hour);
+                    
+                    states.input_text_value = states.selected_date.format(options.format);
+            
+                    states.container.find(".goodyear-text").val(states.input_text_value);			
+					
+					states.drag_item = null;
+						
+					states.drag_start_pos_y = null;
+					
+					states.container.find(".goodyear-hour-picker").removeClass("goodyear-drag_started");
+					
+					$("html").unbind("mousemove");
+					
+					$("html, body").removeClass("disable_selection");			
+					
+					return false;
+				
+				};
+								
+			});	
+			
+            
+		},
+        
+        /*
+	       Выбор часа колесом мыши
+		*/
+		
+		hour_mousewheel : function (){
+			
+			var hour_picker = states.container.find(".goodyear-hour-picker");
+			
+			var hour_slider_speed = 0;
+			
+			var current_millisecond = moment().valueOf();
+			
+			var hour_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*24;
+			
+			var interval_cleared = false;
+			
+			var hour_slider_stop = false;
+			
+			if (states.mousewheel)
+			{
+				hour_picker.mousewheel(function(event){
+					
+					event.stopPropagation();
+					event.preventDefault();	
+					
+					/*
+						Если windows, увеличиваем дельта фактор
+					*/
+					
+					if (navigator.platform.indexOf("Win") != -1) {
+						event.delta *= 20;
+						event.deltaX *= 20;
+						event.deltaY *= 20;
+					}
+					
+					var hour_picker_floating_block_top = (hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top") ? hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top") : parseFloat(hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").css("top"), 10)) + event.deltaY;
+															
+					if (hour_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
+					hour_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
+					
+					if (hour_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height)
+					hour_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height;
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top);
+					
+					hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top", hour_picker_floating_block_top);
+					
+					hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");					
+					
+					if (typeof(hour_slider_stop) != "undefined" && hour_slider_stop != false)
+					{
+						clearTimeout(hour_slider_stop);
+					};
+					
+					hour_slider_stop = setTimeout(function(){
+						
+						states.selected_hour = Math.round(Math.abs((parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
+					
+						/*
+							Устанавливаем значение годов
+						*/
+		
+						var single_hour_items_count_from_top = states.selected_hour;
+						
+						var hour_picker_floating_block_top = - (single_hour_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+						
+						hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").stop(true, true);
+						
+						hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").animate({
+							"top" : hour_picker_floating_block_top + "px"
+						}, {
+							duration: 200,
+							step: function( now, fx ) {	
+							
+							
+								hour_picker.find(".goodyear-hours").find(".goodyear-hours-floating-block").data("top", now);					
+								hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+										
+							}
+						});
+						
+						/*
+							
+						*/
+                        
+                        states.selected_date.hour(states.selected_hour);
+                    
+                        states.input_text_value = states.selected_date.format(options.format);
+                
+                        states.container.find(".goodyear-text").val(states.input_text_value);		
+                        
+					}, 500
+					);
+					
+				});
+			};
+		},
+        
+        /*
+	  		Наведение на минуты
+	  	*/
+	  
+		minute_mouseenter : function(container){
+			  
+			states.container.find(".goodyear-minute-picker").children().filter(".goodyear-minutes").find(".goodyear-minute").find("span").unbind("mouseenter");
+			
+			states.container.find(".goodyear-minute-picker").children().filter(".goodyear-minutes").find(".goodyear-minute").find("span").mouseenter(function(){
+			  
+				$(this).addClass("hover");
+			  
+			}).mouseleave(function(){
+			  
+				$(this).removeClass("hover");
+							  
+			});
+			
+		},
+        
+        /*
+			Клик по часу
+		*/
+		
+		minute_click : function()
+		{
+		  
+			var minute_picker = states.container.find(".goodyear-minute-picker");
+		  
+			states.container.find(".goodyear-minute-picker").children().filter(".goodyear-minutes").find(".goodyear-minute").find("span").unbind("click");  
+			states.container.find(".goodyear-minute-picker").children().filter(".goodyear-minutes").find(".goodyear-minute").find("span").click(function(){
+				
+				if (!states.drag_started)
+				{				
+					var prev_selected_minute = states.selected_minute;
+                    
+                    states.selected_minute = Math.round(parseInt($(this).text(), 10) / 5) * 5;
+					
+					/*
+						Устанавливаем значение годов
+					*/
+					
+					var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / 5;
+					
+					var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").stop(true, true);
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").animate({
+						"top" : minute_picker_floating_block_top + "px"
+					}, {
+						duration: Math.abs(prev_selected_minute - states.selected_minute) * 10,
+						step: function( now, fx ) {		
+						
+							minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top", now);				
+						
+							minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+									
+						}
+					});
+                    
+                    states.selected_date.minute(states.selected_minute);
+                    
+                    states.input_text_value = states.selected_date.format(options.format);
+            
+                    states.container.find(".goodyear-text").val(states.input_text_value);
+					
+				};
+				  
+			});
+			
+		},
+        
+        /*
+			Перетягивание года
+		*/
+		
+		minute_drag : function (){
+		
+			var minute_picker = states.container.find(".goodyear-minute-picker");
+			
+			minute_picker.stop(true, true);
+			
+			minute_picker.mousedown(function(event){
+				
+				states.drag_started = false;
+				
+				minute_picker.removeClass("drag_started");
+				
+				states.drag_item = minute_picker;
+				
+				states.drag_start_pos_y = event.pageY;
+				
+				states.drag_start_element_top = parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10);
+				
+				$("html, body").addClass("disable_selection");
+				
+				$("html").mousemove(function(event){
+				
+					if (states.drag_item == minute_picker)
+					{												
+						states.drag_started = true;
+						
+						minute_picker.addClass("goodyear-drag_started");
+						
+						var difference_y = (states.drag_start_pos_y - event.pageY);
+						
+						var minute_picker_floating_block_top = states.drag_start_element_top - difference_y;
+						
+						var single_minute_items_count_from_top = parseInt(states.selected_date.minute(), 10);
+						
+						var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*(options.max_minute - options.min_minute + 1);
+						
+						if (minute_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
+						minute_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
+						
+						if (minute_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + minute_picker_floating_block_height)
+						minute_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + minute_picker_floating_block_height;
+						
+						minute_picker.find(".goodyear-minutes-floating-block").css("top", minute_picker_floating_block_top);
+						
+						minute_picker.find(".goodyear-minutes-floating-block").data("top", minute_picker_floating_block_top);	
+												
+						minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", minute_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");	
+						
+					};
+				
+				});
+			});
+            
+            states.container.add(document).mouseup(function(e){
+
+				e.stopPropagation();
+				
+				if (states.drag_item == minute_picker)
+				{
+					
+					states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height)) * 5;
+                    
+					/*
+						Устанавливаем значение годов
+					*/
+					
+					var single_minute_items_count_from_top = states.selected_minute / 5;
+					
+					var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").stop(true, true);
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").animate({
+						"top" : minute_picker_floating_block_top + "px"
+					}, {
+						duration: 200,
+						step: function( now, fx ) {	
+						
+							minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top", now);				
+						
+							minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+									
+						}
+					});
+                    
+                    states.selected_date.minute(states.selected_minute);
+                    
+                    states.input_text_value = states.selected_date.format(options.format);
+            
+                    states.container.find(".goodyear-text").val(states.input_text_value);			
+					
+					states.drag_item = null;
+						
+					states.drag_start_pos_y = null;
+					
+					states.container.find(".goodyear-minute-picker").removeClass("goodyear-drag_started");
+					
+					$("html").unbind("mousemove");
+					
+					$("html, body").removeClass("disable_selection");			
+					
+					return false;
+				
+				};
+								
+			});	
+			
+            
+		},
+        
+        /*
+	       Выбор часа колесом мыши
+		*/
+		
+		minute_mousewheel : function (){
+			
+			var minute_picker = states.container.find(".goodyear-minute-picker");
+			
+			var minute_slider_speed = 0;
+			
+			var current_millisecond = moment().valueOf();
+			
+			var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*12;
+			
+			var interval_cleared = false;
+			
+			var minute_slider_stop = false;
+			
+			if (states.mousewheel)
+			{
+				minute_picker.mousewheel(function(event){
+					
+					event.stopPropagation();
+					event.preventDefault();	
+					
+					/*
+						Если windows, увеличиваем дельта фактор
+					*/
+					
+					if (navigator.platform.indexOf("Win") != -1) {
+						event.delta *= 20;
+						event.deltaX *= 20;
+						event.deltaY *= 20;
+					}
+					
+					var minute_picker_floating_block_top = (minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top") ? minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top") : parseFloat(minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").css("top"), 10)) + event.deltaY;
+															
+					if (minute_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
+					minute_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
+					
+					if (minute_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + minute_picker_floating_block_height)
+					minute_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + minute_picker_floating_block_height;
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").css("top", minute_picker_floating_block_top);
+					
+					minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top", minute_picker_floating_block_top);
+					
+					minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", minute_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");					
+					
+					if (typeof(minute_slider_stop) != "undefined" && minute_slider_stop != false)
+					{
+						clearTimeout(minute_slider_stop);
+					};
+					
+					minute_slider_stop = setTimeout(function(){
+						
+						states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height))*5;
+					
+						/*
+							Устанавливаем значение годов
+						*/
+		
+						var single_minute_items_count_from_top = states.selected_minute / 5;
+						
+						var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
+						
+						minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").stop(true, true);
+						
+						minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").animate({
+							"top" : minute_picker_floating_block_top + "px"
+						}, {
+							duration: 200,
+							step: function( now, fx ) {	
+							
+							
+								minute_picker.find(".goodyear-minutes").find(".goodyear-minutes-floating-block").data("top", now);					
+								minute_picker.find(".goodyear-current-minute-selection").find(".goodyear-minutes-floating-block").css("top", now - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");		
+										
+							}
+						});
+						
+						/*
+							
+						*/
+                        
+                        states.selected_date.minute(states.selected_minute);
+                    
+                        states.input_text_value = states.selected_date.format(options.format);
+                
+                        states.container.find(".goodyear-text").val(states.input_text_value);		
+                        
+					}, 500
+					);
+					
+				});
+			};
+		},
 		
 		/*
 			Подсветка даты при наведении
@@ -1495,11 +2281,11 @@
 
 			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
 			
-			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mouseenter(function(){
+			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").not(".disabled").mouseenter(function(){
 			  
 				$(this).addClass("hover");
 
-				states.container.find(".goodyear-text").val(moment(states.displayed_year + "-" + (parseInt($(this).parents(".goodyear-month").data("monthId"), 10) + 1) + "-" + parseInt($(this).text(), 10), "YYYY-M-D").format(options.format));
+				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.format));
 
 				if (!states.is_mobile)
 				{
@@ -1532,11 +2318,11 @@
 			Выбор даты
 		*/
 		
-		date_pick : function(container){
+		date_pick : function(){
 		
 			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
 			
-			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function(){
+			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").not(".disabled").mousedown(function(){
 				
 				states.container.removeClass("goodyear-error");
 				
@@ -1553,7 +2339,7 @@
 				
 				states.input_text_error = false;
 			  
-				states.selected_date = moment(states.displayed_year + "-" + (parseInt($(this).parents(".goodyear-month").data("monthId"), 10) + 1) + "-" + parseInt($(this).text(), 10), "YYYY-M-D");
+				states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
 				
 				states.input_text_value = states.selected_date.format(options.format);
 				
@@ -1666,6 +2452,19 @@
 		{
 			options.max_date = $(this).data("goodyearMaxDate");
 		};
+        
+        if (typeof($(this).data("goodyearHourPicker")) != "undefined")
+		{
+			options.hour_picker = ($(this).data("goodyearHourPicker") ? true : false);
+		};
+        
+        if (typeof($(this).data("goodyearMinutePicker")) != "undefined")
+		{
+			options.minute_picker = ($(this).data("goodyearMinutePicker") ? true : false);
+		};
+        
+        if (options.minute_picker)
+        options.hour_picker = true;
 				
 		/*
 			Язык
@@ -1698,7 +2497,7 @@
 		if (options.min_date)
 		{
 			
-			options.min_year = options.min_date.format("YYYY");
+			options.min_year = parseInt(options.min_date.format("YYYY"), 10);
 			
 		} else if (options.min_year)
 		{
@@ -1741,7 +2540,9 @@
 		if (options.max_date)
 		{
 			
-			options.max_year = options.max_date.format("YYYY");
+            options.max_date = options.max_date.endOf("day");
+            
+			options.max_year = parseInt(options.max_date.format("YYYY"), 10);
 			
 		} else if (options.max_year)
 		{
@@ -1751,6 +2552,8 @@
 			*/
 			
 			options.max_date = methods.string_to_date(options.max_year + "-01-01");
+            
+            options.max_date = options.max_date.endOf("year");
 			
 		} else
 		{
@@ -1802,6 +2605,12 @@
 			states.input_text_value = $(this).val();
 			
 		};
+        
+        /*
+            Устанавливаем время
+        */        
+        states.selected_hour = selected_date.hour();
+        states.selected_minute = Math.round(selected_date.minute() / 5) * 5;
 		
 		/*
 			Проверяем наличие плагина mousewheel

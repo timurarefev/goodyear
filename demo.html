@@ -1,15 +1,143 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Гудъеар 1.0</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="./js/jquery-1.11.0.min.js"></script>
-<script src="./js/jquery-goodyear-1.0.min.js"></script>
-<link rel="stylesheet" href="./css/jquery-goodyear-1.0.min.css">
+<script src="./js/jquery-goodyear-1.0.js"></script>
+<link rel="stylesheet" href="./css/jquery-goodyear-1.0.css">
+<link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+<title>Гудъеар</title>
+<style>
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+
+.clear_both{
+	clear:both;
+}
+
+body .container{
+	padding:20px;
+	font-family:Helvetica, Arial, sans-serif;
+	line-height:22px;
+	font-size:14px;
+}
+
+body .create_event{
+	width:500px;
+	margin:auto;
+}
+
+body .create_event .title{
+	font-weight:bold;
+	margin-bottom:10px;
+}
+
+body .create_event .body{
+}
+
+body .create_event .body table{
+	width:100%;
+	table-layout:fixed;
+}
+
+body .create_event .body table th{
+	width:100px;
+	text-align:left;
+	padding:10px 10px 10px 0px;
+    color: #666666;
+	font-size:12px;
+	vertical-align:top;	
+}
+
+body .create_event .body table td{
+	vertical-align:top;
+	padding:7px 0px 0px 0px;
+}
+
+body .create_event .body table td input,
+body .create_event .body table td textarea{
+	outline:none;
+	border:1px solid #ccc;
+	font-size:12px;
+	padding:5px 8px 5px 8px;
+	resize:none;
+	border-radius: 3px;
+	width:350px;
+}
+
+body .create_event .body table td input:focus,
+body .create_event .body table td textarea:focus{
+	box-shadow:0 -19px 2px -20px #777 inset, -19px 0px 2px -20px #777 inset, 19px 0px 2px -20px #777 inset, 0px 19px 2px -20px #777 inset;
+	border-color:#4D90FE;
+}
+
+body .create_event .body table td input.save{
+	color:#fff;
+	background-color:#496B93;
+	border:none;
+	border-radius: 3px;
+	font-size:12px;
+	cursor:pointer;
+	width:75px;
+	height:27px;
+}
+</style>
 </head>
 <body>
+<div class="container">
+	
+    <div class="create_event">
+    
+    	<div class="title">
+        	Создать новое мероприятие
+        </div>
+        
+        <div class="body">
+            
+            <table>
+                <tr>
+                    <th class="label">
+                        Название
+                    </th>
+                    <td>
+                        <input name="title" type="text" value="" placeholder="Пример: Празднование дня рождения" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label">
+                        Подробности
+                    </th>
+                    <td>
+                        <textarea name="details"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label">
+                        Веб-сайт
+                    </th>
+                    <td>
+                        <input name="web" type="text" value="" placeholder="" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label">
+                        Дата начала
+                    </th>
+                    <td>
+                        <input name="date" class="goodyear" value="2010-07-10 18:25"  data-goodyear-format="D MMMM YYYY год, HH:mm" data-goodyear-min-year="2010" data-goodyear-max-year="2017" data-goodyear-min-date="05-07-2010" data-goodyear-max-date="05-08-2010" data-goodyear-hour-picker="true" data-goodyear-minute-picker="true">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                    </th>
+                    <td>
+                        <input class="save" type="button" value="Создать">
+                    </td>
+                </tr>
+            </table>  
+        </div>
+    </div>
+</div>
 
-<input style="width:200px;" name="date" class="goodyear" value="13.05.2014" data-goodyear-min-year="2010" data-goodyear-max-year="2017" data-goodyear-format="Дата: D MMMM YYYY г.">
 
 </body>
 </html>
