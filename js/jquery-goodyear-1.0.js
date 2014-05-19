@@ -7,7 +7,7 @@
 (function($){
   jQuery.fn.goodyear = function(options){
 
-    options = $.extend({
+    var options = $.extend({
 		
 		format : "D MMM YYYY г."
 		
@@ -175,7 +175,7 @@
 			for (month_num = 0; month_num < 12; month_num++)
 			{	
 						  
-			  text += "<div class='goodyear-month" + (states.today.format("M") == (month_num + 1) ? " today" : "") + "'>"+presets.months_ru_short[month_num] + (states.today.format("M") == (month_num + 1) ? "<span class='bull'> &bull;</span>" : "") + "</div>";
+			  text += "<div class='goodyear-month goodyear-"+presets.months_en[month_num] + (states.today.format("M") == (month_num + 1) ? " today" : "") + "'>"+presets.months_ru_short[month_num] + (states.today.format("M") == (month_num + 1) ? "<span class='bull'> &bull;</span>" : "") + "</div>";
 			  
 			};
 			
@@ -574,21 +574,40 @@
 		},
 		
 		document_actions : function(){
-			
-			$("html").mouseup(function(){
-				
-				if (!states.drag_item)
-				{
-					
-					$(".goodyear-picker").css("zIndex", 1);
-					
-					$(".goodyear-picker").fadeOut(100);
-					
-					states.picker_open = false;
-				
-				};
-				
-			});
+            
+            if (activated_goodyears_list.length == 1)
+            {
+            
+            	$("html").mouseup(function(){
+            	   
+                    var drag_item = false;
+                	
+                    $.each(activated_goodyears_list, function(index, goodyear_element){
+                       
+                       if (goodyear_element.get_states().drag_item)
+                       drag_item = true;
+                        
+                    });
+                    
+    				if (!drag_item)
+    				{
+    					
+    					$(".goodyear-picker").css("zIndex", 1);
+    					
+    					$(".goodyear-picker").fadeOut(100);
+                        
+                        $.each(activated_goodyears_list, function(index, goodyear_element){
+                       
+                           goodyear_element.set_state("picker_open", false);
+                        
+                        });
+    				
+    				};
+    				
+    			});
+            
+            };
+            
 			
 		},
 		
@@ -783,7 +802,8 @@
 		{
 			
 			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
-			var month_slider = states.container.find(".goodyear-month-picker").find(".goodyear-slider");
+			var month_slider = states.container.find(".goodyear-month-picker").find(".goodyear-slider");            
+            var month_picker = states.container.find(".goodyear-month-picker");
 			
 			if (states.selected_date.format("YYYY") != states.displayed_year)
 			{
@@ -897,10 +917,14 @@
                   
                     date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").addClass("disabled");
                     
+                    month_picker.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).addClass("disabled");
+                    
                 } else
                 {
                    
                     date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").removeClass("disabled"); 
+                    
+                    month_picker.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).removeClass("disabled");
                     
                 };
 				
@@ -1465,7 +1489,7 @@
 			});
 			
 			states.container.add(document).mouseup(function(e){
-
+                
 				e.stopPropagation();
 				
 				if (states.drag_item == year_picker)
@@ -1814,14 +1838,14 @@
 						
 						var single_hour_items_count_from_top = parseInt(states.selected_date.format("YYYY"), 10) - options.min_hour;
 						
-						var hour_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*(options.max_hour - options.min_hour + 1);
+						var hour_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*24;
 						
 						if (hour_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
 						hour_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
 						
 						if (hour_picker_floating_block_top < - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height)
 						hour_picker_floating_block_top = - (block_model.year_block_height - block_model.year_selection_top - block_model.single_year_item_height - block_model.year_selection_border_top) + hour_picker_floating_block_height;
-						
+                        
 						hour_picker.find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top);
 						
 						hour_picker.find(".goodyear-hours-floating-block").data("top", hour_picker_floating_block_top);	
@@ -2099,7 +2123,7 @@
 						
 						var single_minute_items_count_from_top = parseInt(states.selected_date.minute(), 10);
 						
-						var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*(options.max_minute - options.min_minute + 1);
+						var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*12;
 						
 						if (minute_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
 						minute_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
@@ -2281,35 +2305,45 @@
 
 			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
 			
-			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").not(".disabled").mouseenter(function(){
-			  
-				$(this).addClass("hover");
-
-				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.format));
-
-				if (!states.is_mobile)
-				{
-					setTimeout(function(){
-						states.container.find(".goodyear-text")[0].select();
-					}, 1);		
-				};
+			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mouseenter(function(){
+			     
+                if (!$(this).hasClass("disabled"))
+                {
+                 
+    				$(this).addClass("hover");
+    
+    				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.format));
+    
+    				if (!states.is_mobile)
+    				{
+    					setTimeout(function(){
+    						states.container.find(".goodyear-text")[0].select();
+    					}, 1);		
+    				};
+                
+                };
 			  
 			}).mouseleave(function(){
-			  
-				$(this).removeClass("hover");
+                
+                if (!$(this).hasClass("disabled"))
+                {
+                
+    				$(this).removeClass("hover");
+    				
+    				if (states.picker_open)
+    				{
+    					states.container.find(".goodyear-text").val(states.input_text_value);					
+    				};
+    				
+    				if (!states.is_mobile)
+    				{
+    					setTimeout(function(){
+    						states.container.find(".goodyear-text")[0].select();
+    					}, 1);	
+    				};
 				
-				if (states.picker_open)
-				{
-					states.container.find(".goodyear-text").val(states.input_text_value);					
-				};
-				
-				if (!states.is_mobile)
-				{
-					setTimeout(function(){
-						states.container.find(".goodyear-text")[0].select();
-					}, 1);	
-				};
-							  
+                };
+                			  
 			});	
 			
 		},
@@ -2422,45 +2456,47 @@
 		
 	};
 		
-    var init = function(){
-		
+    var init = function(element){
+        
+        var goodyear_input = $(element);
+            
 		/*
 			Формат, переданный в data
 		*/
 		
-		if (typeof($(this).data("goodyearFormat")) != "undefined")
+		if (typeof(goodyear_input.data("goodyearFormat")) != "undefined")
 		{
-			options.format = $(this).data("goodyearFormat");
+			options.format = goodyear_input.data("goodyearFormat");
 		};
 		
-		if (typeof($(this).data("goodyearMinYear")) != "undefined")
+		if (typeof(goodyear_input.data("goodyearMinYear")) != "undefined")
 		{
-			options.min_year = $(this).data("goodyearMinYear");
+			options.min_year = goodyear_input.data("goodyearMinYear");
 		};
 		
-		if (typeof($(this).data("goodyearMaxYear")) != "undefined")
+		if (typeof(goodyear_input.data("goodyearMaxYear")) != "undefined")
 		{
-			options.max_year = $(this).data("goodyearMaxYear");
+			options.max_year = goodyear_input.data("goodyearMaxYear");
 		};	
 		
-		if (typeof($(this).data("goodyearMinDate")) != "undefined")
+		if (typeof(goodyear_input.data("goodyearMinDate")) != "undefined")
 		{
-			options.min_date = $(this).data("goodyearMinDate");
+			options.min_date = goodyear_input.data("goodyearMinDate");
 		};
 		
-		if (typeof($(this).data("goodyearMaxDate")) != "undefined")
+		if (typeof(goodyear_input.data("goodyearMaxDate")) != "undefined")
 		{
-			options.max_date = $(this).data("goodyearMaxDate");
+			options.max_date = goodyear_input.data("goodyearMaxDate");
 		};
         
-        if (typeof($(this).data("goodyearHourPicker")) != "undefined")
+        if (typeof(goodyear_input.data("goodyearHourPicker")) != "undefined")
 		{
-			options.hour_picker = ($(this).data("goodyearHourPicker") ? true : false);
+			options.hour_picker = (goodyear_input.data("goodyearHourPicker") ? true : false);
 		};
         
-        if (typeof($(this).data("goodyearMinutePicker")) != "undefined")
+        if (typeof(goodyear_input.data("goodyearMinutePicker")) != "undefined")
 		{
-			options.minute_picker = ($(this).data("goodyearMinutePicker") ? true : false);
+			options.minute_picker = (goodyear_input.data("goodyearMinutePicker") ? true : false);
 		};
         
         if (options.minute_picker)
@@ -2476,7 +2512,7 @@
 			Выбранная в данный момент дата
 		*/
 		
-		var selected_date = methods.string_to_date($(this).val());
+		var selected_date = methods.string_to_date(goodyear_input.val());
 		
 		/*
 			Сегодня
@@ -2579,9 +2615,20 @@
 		/*
 			Если распарсилось и попадает в диапазон
 		*/
-		
+        
 		if (selected_date && (selected_date >= options.min_date && selected_date <= options.max_date))
 		{
+		  
+            if (!options.minute_picker)
+            {
+                selected_date.minute(0);
+            };
+            
+            if (!options.hour_picker)
+            {
+                selected_date.hour(0);
+            };
+          
 			states.selected_date = selected_date;
 			states.input_text_value = states.selected_date.format(options.format);
 		}
@@ -2593,7 +2640,7 @@
 			*/
 			
 			states.selected_date = states.today;
-			states.input_text_value = $(this).val();
+			states.input_text_value = goodyear_input.val();
 						
 		} else
 		{
@@ -2602,7 +2649,7 @@
 			*/
 			
 			states.selected_date = options.min_date;
-			states.input_text_value = $(this).val();
+			states.input_text_value = goodyear_input.val();
 			
 		};
         
@@ -2624,19 +2671,27 @@
 		/*
 			Реакции всего документа на некоторые действия: отпускание мыши, клик в стороне
 		*/
+        
+        activated_goodyears_list[activated_goodyears_list.length] = {
+            get_states : function(){ return states; },
+            set_state : function(state_name, state_value){ states[state_name] = state_value;}
+        }
 		
 		methods.document_actions();
 
-		methods.wrap_element($(this));
-	  
+		methods.wrap_element(goodyear_input);
+      
     };
  
-    return this.each(init); 
+    return init(this);
+        
   };
 })(jQuery);
 
 $(document).ready(function(){
-
+    
+    activated_goodyears_list = [];
+    
 	var is_goodyear_script = new RegExp('^.*?goodyear[^/]*?$', "i");
 	
 	var find_script_path = new RegExp('^(.*?)[^/]*?$', "i");
@@ -2669,9 +2724,9 @@ $(document).ready(function(){
 	};
 		
 	$(".goodyear").each(function(){
-			
+            
 		$(this).goodyear();
-		
+        
 	});
 		
 });

@@ -40,7 +40,7 @@ body .create_event .body table{
 }
 
 body .create_event .body table th{
-	width:100px;
+	width:145px;
 	text-align:left;
 	padding:10px 10px 10px 0px;
     color: #666666;
@@ -104,26 +104,34 @@ body .create_event .body table td input.save{
                 </tr>
                 <tr>
                     <th class="label">
-                        Подробности
+                        Выбор даты
                     </th>
                     <td>
-                        <textarea name="details"></textarea>
+                        <input name="date" class="goodyear" value="2010-07-10 18:25">
                     </td>
                 </tr>
                 <tr>
                     <th class="label">
-                        Веб-сайт
+                        Дата с выбором часа
                     </th>
                     <td>
-                        <input name="web" type="text" value="" placeholder="" />
+                        <input name="date" class="goodyear" value="2010-07-10 18:25"  data-goodyear-format="D MMMM YYYY год, HH:mm" data-goodyear-min-year="2010" data-goodyear-max-year="2017" data-goodyear-min-date="05-07-2010" data-goodyear-max-date="05-08-2010" data-goodyear-hour-picker="true">
                     </td>
                 </tr>
                 <tr>
                     <th class="label">
-                        Дата начала
+                        Дата с выбором времени
                     </th>
                     <td>
                         <input name="date" class="goodyear" value="2010-07-10 18:25"  data-goodyear-format="D MMMM YYYY год, HH:mm" data-goodyear-min-year="2010" data-goodyear-max-year="2017" data-goodyear-min-date="05-07-2010" data-goodyear-max-date="05-08-2010" data-goodyear-hour-picker="true" data-goodyear-minute-picker="true">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label">
+                        Дата с выбором времени
+                    </th>
+                    <td>
+                        <input name="date" class="goodyear" value="2010-07-10 18:25"  data-goodyear-format="D MMMM YYYY год, HH:mm" data-goodyear-min-year="2010" data-goodyear-min-date="05-07-2010" data-goodyear-hour-picker="true" data-goodyear-minute-picker="true">
                     </td>
                 </tr>
                 <tr>

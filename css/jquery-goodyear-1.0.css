@@ -71,7 +71,7 @@
 
 .goodyear-container .goodyear-picker.goodyear-add-hour-picker,
 .goodyear-container .goodyear-picker.goodyear-add-minute-picker{
-    width:379px;
+    width:388px;
 }
 
 .goodyear-container .goodyear-picker .goodyear-date-picker-label{
@@ -294,10 +294,15 @@
 	border-left:1px solid #E5E5E5;
 }
 
+.goodyear-container .goodyear-picker.goodyear-add-hour-picker .goodyear-year-picker,
+.goodyear-container .goodyear-picker.goodyear-add-minute-picker .goodyear-year-picker{
+    border-right:1px solid #E5E5E5;    
+}
+
 .goodyear-container .goodyear-picker .goodyear-hour-picker{
 	height:269px;
 	top:0px;
-	left:318px;
+	left:327px;
 	width:30px;
 	border-left:1px solid #E5E5E5;
 }
@@ -305,7 +310,7 @@
 .goodyear-container .goodyear-picker .goodyear-minute-picker{
 	height:269px;
 	top:0px;
-	left:349px;
+	left:358px;
 	width:30px;
 }
 
@@ -384,6 +389,10 @@
 	transition: color 0.2s ease-out 0s;
 }
 
+.goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-months .goodyear-month.disabled{
+    color: #CCC;
+}
+
 .goodyear-container .goodyear-picker .goodyear-month-picker .goodyear-months .goodyear-month .bull{
 	display:none;
 }
@@ -418,7 +427,7 @@
 	color:#000;
     top:120px;
     position:absolute; 
-    left:347px;
+    left:356px;
     text-align:center;
 }
 
