@@ -1,5 +1,5 @@
 ﻿/*
- * Goodyear 1.0
+ * Goodyear 1.1
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
@@ -9,7 +9,7 @@
 
     var options = $.extend({
 		
-		format : "D MMM YYYY г."
+		format : "D MMMM YYYY г."
 		
     }, options);
 	  	
@@ -2302,12 +2302,12 @@
 		*/
 		
 		date_hover : function (){
-
+			
 			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
 			
 			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mouseenter(function(){
 			     
-                if (!$(this).hasClass("disabled"))
+                if (!$(this).hasClass("disabled") && states.picker_open)
                 {
                  
     				$(this).addClass("hover");
@@ -2325,7 +2325,7 @@
 			  
 			}).mouseleave(function(){
                 
-                if (!$(this).hasClass("disabled"))
+                if (!$(this).hasClass("disabled") && states.picker_open)
                 {
                 
     				$(this).removeClass("hover");
@@ -2344,7 +2344,7 @@
 				
                 };
                 			  
-			});	
+			});
 			
 		},
 		
@@ -2392,9 +2392,9 @@
 				
 				states.container.find(".goodyear-picker").css("zIndex", 1);
 					
-				states.container.find(".goodyear-picker").fadeOut(100);
+				states.container.find(".goodyear-picker").fadeOut(100);		
 				
-				states.picker_open = false;				
+				states.picker_open = false;	
 			  
 			});
 		
