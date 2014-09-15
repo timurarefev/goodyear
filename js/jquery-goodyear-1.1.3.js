@@ -1,5 +1,5 @@
 ﻿/*
- * Goodyear 1.1.2
+ * Goodyear 1.1.3
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
@@ -2656,9 +2656,16 @@
         /*
             Устанавливаем время
         */        
-        states.selected_hour = selected_date.hour();
-        states.selected_minute = Math.round(selected_date.minute() / 5) * 5;
-		
+		if (selected_date)
+		{
+	        states.selected_hour = selected_date.hour();
+	        states.selected_minute = Math.round(selected_date.minute() / 5) * 5;
+		} else
+		{
+			states.selected_hour = 0;
+			states.selected_minute = 0;
+		}
+
 		/*
 			Проверяем наличие плагина mousewheel
 		*/
