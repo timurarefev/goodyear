@@ -396,12 +396,12 @@
 			switch ($(element).css("box-sizing"))
 			{			
 				case "border-box" :
-					container.css("width", parseFloat($(element).css("width")));
+					container.css("width", $(element).css("width"));
 				break;
 				
 				case "content-box" :
 					container.css("width", 
-							parseFloat($(element).css("width"))
+							parseFloat($(element).width())
 							+ parseFloat($(element).css("padding-left"))
 							+ parseFloat($(element).css("padding-right"))
 							+ parseFloat($(element).css("border-left-width"))
@@ -410,13 +410,11 @@
 				
 				case "padding-box" :
 					container.css("width", 
-							parseFloat($(element).css("width"))
+							parseFloat($(element).width())
 							+ parseFloat($(element).css("border-left-width"))
 							+ parseFloat($(element).css("border-right-width")));
 				break;			
 			}
-			
-			
 			
 			element.replaceWith(container);	
 			
