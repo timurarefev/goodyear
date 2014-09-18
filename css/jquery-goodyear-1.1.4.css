@@ -54,7 +54,7 @@
 }
 
 .goodyear-container .goodyear-picker{
-	width:318px;
+	width:320px;
 	height:269px;
 	position:absolute;
 	left:-1px;
@@ -77,7 +77,7 @@
 
 .goodyear-container .goodyear-picker.goodyear-add-hour-picker,
 .goodyear-container .goodyear-picker.goodyear-add-minute-picker{
-    width:388px;
+    width:390px;
 }
 
 .goodyear-container .goodyear-picker .goodyear-date-picker-label{
