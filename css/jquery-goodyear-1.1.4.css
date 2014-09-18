@@ -12,6 +12,10 @@
 	text-align:left;
 }
 
+.goodyear-container *{
+	box-sizing: content-box;
+}
+
 .goodyear-container.focus{
 	box-shadow:0 -19px 2px -20px #777 inset, -19px 0px 2px -20px #777 inset, 19px 0px 2px -20px #777 inset, 0px 19px 2px -20px #777 inset;
 	border-color:#4D90FE;
@@ -24,6 +28,7 @@
 }
 
 .goodyear-container .goodyear-text{
+	margin: 0px!important;
 }
 
 .goodyear-container.goodyear-error .goodyear-text{
