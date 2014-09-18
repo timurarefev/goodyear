@@ -13,7 +13,7 @@
 }
 
 .goodyear-container *{
-	box-sizing: content-box;
+	box-sizing: border-box;
 }
 
 .goodyear-container.focus{
@@ -29,6 +29,7 @@
 
 .goodyear-container .goodyear-text{
 	margin: 0px!important;
+    width: 100%!important;
 }
 
 .goodyear-container.goodyear-error .goodyear-text{
@@ -112,7 +113,7 @@
 .goodyear-container .goodyear-picker .goodyear-date-picker-label .goodyear-friday,
 .goodyear-container .goodyear-picker .goodyear-date-picker-label .goodyear-saturday,
 .goodyear-container .goodyear-picker .goodyear-date-picker-label .goodyear-sunday{
-	width:13px;
+	width:25px;
 	display:block;
 	float:left;
 	padding-left:6px;
@@ -233,7 +234,7 @@
 .goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-slide_line span{
 	display:block;
 	float:left;
-	width:13px;
+	width:25px;
 	padding-left:6px;
 	padding-right:6px;
 	height:21px;

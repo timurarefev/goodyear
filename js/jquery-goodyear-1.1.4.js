@@ -388,12 +388,35 @@
 	};
 	
 	var methods = {
-		
+        
 		wrap_element : function(element){
 			
 			var container = $(templates.container()).clone();
+            
+			switch ($(element).css("box-sizing"))
+			{			
+				case "border-box" :
+					container.css("width", parseFloat($(element).css("width")));
+				break;
+				
+				case "content-box" :
+					container.css("width", 
+							parseFloat($(element).css("width"))
+							+ parseFloat($(element).css("padding-left"))
+							+ parseFloat($(element).css("padding-right"))
+							+ parseFloat($(element).css("border-left-width"))
+							+ parseFloat($(element).css("border-right-width")));
+				break;
+				
+				case "padding-box" :
+					container.css("width", 
+							parseFloat($(element).css("width"))
+							+ parseFloat($(element).css("border-left-width"))
+							+ parseFloat($(element).css("border-right-width")));
+				break;			
+			}
 			
-			container.css("width", parseInt(element.css("width"), 10) + parseInt(element.css("paddingLeft"), 10) + parseInt(element.css("paddingRight"), 10) + parseInt(element.css("borderLeftWidth"), 10) + parseInt(element.css("borderRightWidth"), 10));
+			
 			
 			element.replaceWith(container);	
 			
