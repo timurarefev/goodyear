@@ -9,7 +9,9 @@
 
     var options = $.extend({
 		
-		format : "D MMMM YYYY г."
+		format : "D MMMM YYYY г.",
+		
+		minutes_step : 5			
 		
     }, options);
 	  	
@@ -148,7 +150,7 @@
 			
 			var text = "";
 			
-			for (i = 0; i < 60; i = i + 5)
+			for (i = 0; i < 60; i = i + options.minutes_step)
 			{
 				text += "<div class='goodyear-minute'><span>" + (i < 10 ? "0" : "") + i + "</span></div>";
 			};
@@ -788,11 +790,11 @@
                 
                 previous_selected_minute = states.selected_minute;
               
-                states.selected_minute = Math.round(states.selected_date.minute() / 5) * 5;
+                states.selected_minute = Math.round(states.selected_date.minute() / options.minutes_step) * options.minutes_step;
               
                 var minute_picker = states.container.find(".goodyear-minute-picker");
 			
-    			var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / 5;
+    			var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / options.minutes_step;
                 
                 var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
                 
@@ -2069,13 +2071,13 @@
 				{				
 					var prev_selected_minute = states.selected_minute;
                     
-                    states.selected_minute = Math.round(parseInt($(this).text(), 10) / 5) * 5;
+                    states.selected_minute = Math.round(parseInt($(this).text(), 10) / options.minutes_step) * options.minutes_step;
 					
 					/*
 						Устанавливаем значение годов
 					*/
 					
-					var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / 5;
+					var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / options.minutes_step;
 					
 					var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
 					
@@ -2107,7 +2109,7 @@
 		},
         
         /*
-			Перетягивание года
+			Перетягивание минуты
 		*/
 		
 		minute_drag : function (){
@@ -2144,7 +2146,7 @@
 						
 						var single_minute_items_count_from_top = parseInt(states.selected_date.minute(), 10);
 						
-						var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*12;
+						var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*( 60 / options.minutes_step );
 						
 						if (minute_picker_floating_block_top > (block_model.year_selection_top + block_model.year_selection_border_top))
 						minute_picker_floating_block_top = (block_model.year_selection_top + block_model.year_selection_border_top);
@@ -2170,13 +2172,13 @@
 				if (states.drag_item == minute_picker)
 				{
 					
-					states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height)) * 5;
+					states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height)) * options.minutes_step;
                     
 					/*
 						Устанавливаем значение годов
 					*/
 					
-					var single_minute_items_count_from_top = states.selected_minute / 5;
+					var single_minute_items_count_from_top = states.selected_minute / options.minutes_step;
 					
 					var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
 					
@@ -2232,7 +2234,7 @@
 			
 			var current_millisecond = moment().valueOf();
 			
-			var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*12;
+			var minute_picker_floating_block_height = block_model.year_block_height - block_model.single_year_item_height*( 60 / options.minutes_step );
 			
 			var interval_cleared = false;
 			
@@ -2276,13 +2278,13 @@
 					
 					minute_slider_stop = setTimeout(function(){
 						
-						states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height))*5;
+						states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height))*options.minutes_step;
 					
 						/*
 							Устанавливаем значение годов
 						*/
 		
-						var single_minute_items_count_from_top = states.selected_minute / 5;
+						var single_minute_items_count_from_top = states.selected_minute / options.minutes_step;
 						
 						var minute_picker_floating_block_top = - (single_minute_items_count_from_top * block_model.single_year_item_height) + block_model.year_selection_top + block_model.year_selection_border_top;
 						
@@ -2519,10 +2521,18 @@
 		{
 			options.minute_picker = (goodyear_input.data("goodyearMinutePicker") ? true : false);
 		};
+		
+		if (typeof(goodyear_input.data("goodyearMinutesStep")) != "undefined")
+		{
+			options.minutes_step = (goodyear_input.data("goodyearMinutesStep") ? true : false);
+			
+			options.minutes_step = 60 / Math.round(60 / options.minutes_step);			
+		};
         
         if (options.minute_picker)
         options.hour_picker = true;
-				
+        
+        
 		/*
 			Язык
 		*/
@@ -2680,7 +2690,7 @@
 		if (selected_date)
 		{
 	        states.selected_hour = selected_date.hour();
-	        states.selected_minute = Math.round(selected_date.minute() / 5) * 5;
+	        states.selected_minute = Math.round(selected_date.minute() / options.minutes_step) * options.minutes_step;
 		} else
 		{
 			states.selected_hour = 0;
