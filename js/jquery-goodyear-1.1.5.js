@@ -2524,14 +2524,13 @@
 		
 		if (typeof(goodyear_input.data("goodyearMinutesStep")) != "undefined")
 		{
-			options.minutes_step = (goodyear_input.data("goodyearMinutesStep") ? true : false);
+			options.minutes_step = (goodyear_input.data("goodyearMinutesStep") ? goodyear_input.data("goodyearMinutesStep") : 5);
 			
-			options.minutes_step = 60 / Math.round(60 / options.minutes_step);			
+			options.minutes_step = 60 / Math.floor(60 / options.minutes_step);
 		};
         
         if (options.minute_picker)
         options.hour_picker = true;
-        
         
 		/*
 			Язык
