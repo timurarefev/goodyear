@@ -740,13 +740,6 @@
         			*/
         			
         			var year_picker = states.container.find(".goodyear-year-picker");
-        			
-                    if (options.range_to_id)
-                    {
-                        
-                        console.log(options);                        
-                        
-                    };
                     
         			var single_year_items_count_from_top = parseInt(states.selected_date.format("YYYY"), 10) - options.min_year;
         			
@@ -1930,9 +1923,7 @@
         						*/
         						
         						states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
-        						        						
-        						console.log(states.selected_date);
-        						
+        						        						        						
         	        			states.input_text_value = states.selected_date.format(options.format);
         	        			
         	        			methods.set_date();
@@ -2727,8 +2718,6 @@
     		/*
     			Формат, переданный в data
     		*/
-            
-            console.log(goodyear_input.data("goodyearRangeFrom"));
             
             if (typeof(goodyear_input.data("goodyearRangeFrom")) != "undefined" && typeof(goodyear_input.data("goodyearRangeFrom")))
             {
