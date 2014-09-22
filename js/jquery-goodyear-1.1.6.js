@@ -1,5 +1,5 @@
 ﻿/*
- * Goodyear 1.1.5
+ * Goodyear 1.1.6
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
@@ -776,7 +776,10 @@
         			*/
         			
         			if (states.displayed_year != prev_displayed_year)
-        			methods.year_change_date_block_reaction();
+        			{
+            			
+        				methods.year_change_date_block_reaction();
+        			};
         			
         			/*
         				Устанавливаем значение в блоке выбора месяца
@@ -910,7 +913,8 @@
                     states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.format));
         			
                     /*
-                        Устанавливаем такую же дату в связанный input'ax
+                        Устанавливаем такую же дату в связанных input'ax
+                        (тестовый функционал)
                     */
                     
                     if (options.range_from_id)
@@ -988,16 +992,8 @@
         			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
         			var month_slider = states.container.find(".goodyear-month-picker").find(".goodyear-slider");            
                     var month_picker = states.container.find(".goodyear-month-picker");
-        			
-        			if (states.selected_date.format("YYYY") != states.displayed_year)
-        			{
-        				date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").removeClass("active");
-        			} else
-        			{
-        				
-        				date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[parseInt(states.selected_date.format("M"), 10) - 1]).find("span").filter("[date='"+states.selected_date.format("D")+"']").addClass("active");
-        				
-        			};
+       				
+       				date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[parseInt(states.selected_date.format("M"), 10) - 1]).find("span").filter("[date='"+states.selected_date.format("D")+"']").addClass("active");
         			
         			if (states.today.format("YYYY") != states.displayed_year)
         			{
@@ -1605,7 +1601,20 @@
         						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					
+        					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+        					
+                			states.input_text_value = states.selected_date.format(options.format);
+                			
+                			methods.set_date();
+        					
         					methods.year_change_date_block_reaction();
+        					
+        					if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         				};
         				  
@@ -1706,7 +1715,20 @@
         						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					
-        					methods.year_change_date_block_reaction();					
+        					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+        					
+                			states.input_text_value = states.selected_date.format(options.format);
+                			
+                			methods.set_date();
+        					
+        					methods.year_change_date_block_reaction();	
+        					
+        					if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         					states.drag_item = null;
         						
@@ -1802,6 +1824,12 @@
         						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					/*
+        					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+		        			
+		        			states.input_text_value = states.selected_date.format(options.format);        			
+		        			
+		        			methods.set_date();
+        					
         					methods.year_change_date_block_reaction();	
         				}, 500
         				);
@@ -1901,7 +1929,23 @@
         							В результате изменения года меняем ситуацию в блоке с датами
         						*/
         						
+        						states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+        						        						
+        						console.log(states.selected_date);
+        						
+        	        			states.input_text_value = states.selected_date.format(options.format);
+        	        			
+        	        			methods.set_date();
+        						
         						methods.year_change_date_block_reaction();	
+        						
+        						if (!states.is_mobile)
+        	    				{
+        	    					setTimeout(function(){
+        	    						states.container.find(".goodyear-text")[0].select();
+        	    					}, 1);	
+        	    				};
+        						
         					}, 500
         					);
         					
@@ -1975,6 +2019,13 @@
                             states.input_text_value = states.selected_date.format(options.format);
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
+                            
+                            if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         				};
         				  
@@ -2075,7 +2126,14 @@
                             
                             states.input_text_value = states.selected_date.format(options.format);
                     
-                            states.container.find(".goodyear-text").val(states.input_text_value);			
+                            states.container.find(".goodyear-text").val(states.input_text_value);		
+                            
+                            if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         					states.drag_item = null;
         						
@@ -2185,7 +2243,14 @@
                             
                                 states.input_text_value = states.selected_date.format(options.format);
                         
-                                states.container.find(".goodyear-text").val(states.input_text_value);		
+                                states.container.find(".goodyear-text").val(states.input_text_value);	
+                                
+                                if (!states.is_mobile)
+                				{
+                					setTimeout(function(){
+                						states.container.find(".goodyear-text")[0].select();
+                					}, 1);	
+                				};
                                 
         					}, 500
         					);
@@ -2260,6 +2325,13 @@
                             states.input_text_value = states.selected_date.format(options.format);
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
+                            
+                            if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         				};
         				  
@@ -2360,7 +2432,14 @@
                             
                             states.input_text_value = states.selected_date.format(options.format);
                     
-                            states.container.find(".goodyear-text").val(states.input_text_value);			
+                            states.container.find(".goodyear-text").val(states.input_text_value);
+                            
+                            if (!states.is_mobile)
+            				{
+            					setTimeout(function(){
+            						states.container.find(".goodyear-text")[0].select();
+            					}, 1);	
+            				};
         					
         					states.drag_item = null;
         						
@@ -2470,7 +2549,14 @@
                             
                                 states.input_text_value = states.selected_date.format(options.format);
                         
-                                states.container.find(".goodyear-text").val(states.input_text_value);		
+                                states.container.find(".goodyear-text").val(states.input_text_value);	
+                                
+                                if (!states.is_mobile)
+                				{
+                					setTimeout(function(){
+                						states.container.find(".goodyear-text")[0].select();
+                					}, 1);	
+                				};
                                 
         					}, 500
         					);
