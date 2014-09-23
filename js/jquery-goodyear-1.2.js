@@ -840,7 +840,10 @@
         				}
         			});
         			
-        			date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[states.today.format("M") - 1]).find("span").filter("[date='"+states.today.format("D")+"']").addClass("today").append("<div class='bull'>&bull;</div>");
+        			if (states.today.format("YYYY") == states.displayed_year)
+        			{
+        				date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[states.today.format("M") - 1]).find("span").filter("[date='"+states.today.format("D")+"']").addClass("today").append("<div class='bull'>&bull;</div>");
+        			};
         		  
         		 	date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").filter(".active").addClass("prev_active");
         		  
