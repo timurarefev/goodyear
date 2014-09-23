@@ -1,5 +1,5 @@
 ﻿/*
- * Goodyear 1.1.6
+ * Goodyear 1.2
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
@@ -85,7 +85,9 @@
         
             var options = $.extend({
     		
-        		format : "D MMMM YYYY г.",
+        		format : "YYYY-MM-DD",
+        		
+        		visible_format : "D MMMM YYYY г.",
         		
         		minutes_step : 5			
     		
@@ -135,6 +137,7 @@
         		
         			return "\
         			<div class='goodyear-container'>\
+        			<input class='goodyear-text'/>\
         			<div class='goodyear-icon'></div>\
         			<div class='goodyear-picker"+(options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "")+"'>\
         				<div class='goodyear-date-picker'>\
@@ -469,16 +472,16 @@
                 
         		wrap_element : function(element){
                     
-        			var container = $(templates.container()).clone();
+        			var container_template = $(templates.container()).clone();
                     
         			switch ($(element).css("box-sizing"))
         			{			
         				case "border-box" :
-        					container.css("width", $(element).css("width"));
+        					container_template.css("width", $(element).css("width"));
         				break;
         				
         				case "content-box" :
-        					container.css("width", 
+        					container_template.css("width", 
         							parseFloat($(element).width())
         							+ parseFloat($(element).css("padding-left"))
         							+ parseFloat($(element).css("padding-right"))
@@ -487,20 +490,24 @@
         				break;
         				
         				case "padding-box" :
-        					container.css("width", 
+        					container_template.css("width", 
         							parseFloat($(element).width())
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
         				break;			
         			}
         			
-        			element.replaceWith(container);	
+        			element.wrapAll(container_template);	
         			
-        			element.addClass("goodyear-text").val(states.input_text_value).prependTo(container);			
+        			element.removeClass("goodyear").addClass("goodyear-hidden-text");
         			
-        			states.container = container;
+        			states.container = element.parent();
         			
-        			if (states.input_text_value == states.selected_date.format(options.format))
+        			states.container.find(".goodyear-text").val(states.input_text_value);
+        			
+        			states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+        			
+        			if (states.input_text_value == states.selected_date.format(options.visible_format))
         			{
         				states.container.removeClass("goodyear-error");
         				
@@ -609,54 +616,64 @@
         		  
         			methods.year_mousewheel();
                     
-                    /*
-        				Подсветка часа при наведении
-        			*/
+        			if (options.hour_picker)
+        			{
         			
-        			methods.hour_mouseenter();
-                    
-                    /*
-        				Клик по часу
-        			*/
-        		  
-        			methods.hour_click();
-                    
-                    /*
-        				Перетягивание часа
-        			*/
-        		  
-        			methods.hour_drag();
-                    
-                    /*
-        				Прокрутка часа мышью
-        			*/
-        		  
-        			methods.hour_mousewheel();
-                  
-                    /*
-        				Подсветка минуты при наведении
-        			*/
-        			
-        			methods.minute_mouseenter();
-                    
-                    /*
-        				Клик по минуте
-        			*/
-        		  
-        			methods.minute_click();
-                    
-                    /*
-        				Перетягивание минуты
-        			*/
-        		  
-        			methods.minute_drag();
-                    
-                    /*
-        				Прокрутка часа мышью
-        			*/
-        		  
-        			methods.minute_mousewheel();
-        
+	                    /*
+	        				Подсветка часа при наведении
+	        			*/
+	        			
+	        			methods.hour_mouseenter();
+	                    
+	                    /*
+	        				Клик по часу
+	        			*/
+	        		  
+	        			methods.hour_click();
+	                    
+	                    /*
+	        				Перетягивание часа
+	        			*/
+	        		  
+	        			methods.hour_drag();
+	                    
+	                    /*
+	        				Прокрутка часа мышью
+	        			*/
+	        		  
+	        			methods.hour_mousewheel();
+	        			
+	        			if (options.minute_picker)
+	        			{
+	        			
+		                    /*
+		        				Подсветка минуты при наведении
+		        			*/
+		        			
+		        			methods.minute_mouseenter();
+		                    
+		                    /*
+		        				Клик по минуте
+		        			*/
+		        		  
+		        			methods.minute_click();
+		                    
+		                    /*
+		        				Перетягивание минуты
+		        			*/
+		        		  
+		        			methods.minute_drag();
+		                    
+		                    /*
+		        				Прокрутка часа мышью
+		        			*/
+		        		  
+		        			methods.minute_mousewheel();
+	        			
+	        			};
+	        		
+        			};
+	        			
         			/*
         				Подсветка даты при наведении
         			*/
@@ -903,7 +920,8 @@
                         Вписываем значение в текстовое поле (на случай инвоука)
                     */
                     
-                    states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.format));
+                    states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.visible_format));
+                    states.container.find(".goodyear-hidden-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.format));
         			
                     /*
                         Устанавливаем такую же дату в связанных input'ax
@@ -1227,9 +1245,11 @@
         				} else
         				{                    
         					states.selected_date = selected_date;                    
-        					states.input_text_value = states.selected_date.format(options.format);
+        					states.input_text_value = states.selected_date.format(options.visible_format);
+        					states.input_hidden_text_value = states.selected_date.format(options.format);
         					methods.set_date();
         					states.container.find(".goodyear-text").val(states.input_text_value);
+        					states.container.find(".goodyear-text").val(states.input_hidden_text_value);
         					states.container.removeClass("goodyear-error");
         					states.input_text_error = false;
         				};			
@@ -1596,7 +1616,7 @@
         					
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
         					
-                			states.input_text_value = states.selected_date.format(options.format);
+                			states.input_text_value = states.selected_date.format(options.visible_format);
                 			
                 			methods.set_date();
         					
@@ -1710,7 +1730,7 @@
         					
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
         					
-                			states.input_text_value = states.selected_date.format(options.format);
+                			states.input_text_value = states.selected_date.format(options.visible_format);
                 			
                 			methods.set_date();
         					
@@ -1819,7 +1839,7 @@
         					/*
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
 		        			
-		        			states.input_text_value = states.selected_date.format(options.format);        			
+		        			states.input_text_value = states.selected_date.format(options.visible_format);        			
 		        			
 		        			methods.set_date();
         					
@@ -1924,7 +1944,7 @@
         						
         						states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
         						        						        						
-        	        			states.input_text_value = states.selected_date.format(options.format);
+        	        			states.input_text_value = states.selected_date.format(options.visible_format);
         	        			
         	        			methods.set_date();
         						
@@ -2007,9 +2027,10 @@
                             
                             states.selected_date.hour(states.selected_hour);
                             
-                            states.input_text_value = states.selected_date.format(options.format);
+                            states.input_text_value = states.selected_date.format(options.visible_format);
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
+                            states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                             
                             if (!states.is_mobile)
             				{
@@ -2115,9 +2136,11 @@
                             
                             states.selected_date.hour(states.selected_hour);
                             
-                            states.input_text_value = states.selected_date.format(options.format);
+                            states.input_text_value = states.selected_date.format(options.visible_format);
+                            states.input_hidden_text_value = states.selected_date.format(options.format);
                     
-                            states.container.find(".goodyear-text").val(states.input_text_value);		
+                            states.container.find(".goodyear-text").val(states.input_text_value);	
+                            states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                             
                             if (!states.is_mobile)
             				{
@@ -2232,9 +2255,11 @@
                                 
                                 states.selected_date.hour(states.selected_hour);
                             
-                                states.input_text_value = states.selected_date.format(options.format);
+                                states.input_text_value = states.selected_date.format(options.visible_format);
+                                states.input_hidden_text_value = states.selected_date.format(options.format);
                         
-                                states.container.find(".goodyear-text").val(states.input_text_value);	
+                                states.container.find(".goodyear-text").val(states.input_text_value);
+                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2313,9 +2338,11 @@
                             
                             states.selected_date.minute(states.selected_minute);
                             
-                            states.input_text_value = states.selected_date.format(options.format);
+                            states.input_text_value = states.selected_date.format(options.visible_format);
+                            states.input_hidden_text_value = states.selected_date.format(options.format);
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
+                            states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                             
                             if (!states.is_mobile)
             				{
@@ -2421,9 +2448,11 @@
                             
                             states.selected_date.minute(states.selected_minute);
                             
-                            states.input_text_value = states.selected_date.format(options.format);
+                            states.input_text_value = states.selected_date.format(options.visible_format);
+                            states.input_hidden_text_value = states.selected_date.format(options.format);
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
+                            states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                             
                             if (!states.is_mobile)
             				{
@@ -2538,9 +2567,11 @@
                                 
                                 states.selected_date.minute(states.selected_minute);
                             
-                                states.input_text_value = states.selected_date.format(options.format);
+                                states.input_text_value = states.selected_date.format(options.visible_format);
+                                states.input_hidden_text_value = states.selected_date.format(options.format);
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);	
+                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);	
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2571,7 +2602,7 @@
                          
             				$(this).addClass("hover");
             
-            				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.format));
+            				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.visible_format));
             
             				if (!states.is_mobile)
             				{
@@ -2634,9 +2665,11 @@
         			  
         				states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
         				
-        				states.input_text_value = states.selected_date.format(options.format);
+        				states.input_text_value = states.selected_date.format(options.visible_format);
+        				states.input_hidden_text_value = states.selected_date.format(options.format);
         				
         				states.container.find(".goodyear-text").val(states.input_text_value);
+        				states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
         				
         				methods.set_date();
         				
@@ -2673,6 +2706,16 @@
                     for (i = 0; i < presets.common_date_langs.length; i++)
         			{
                         var parsed_date = moment(methods.trim(string), options.format, presets.common_date_langs[i], true);
+                        
+                        if (parsed_date.isValid())
+            			{
+        	                break;
+            			};
+                    };
+                    
+                    for (i = 0; i < presets.common_date_langs.length; i++)
+        			{
+                        var parsed_date = moment(methods.trim(string), options.visible_format, presets.common_date_langs[i], true);
                         
                         if (parsed_date.isValid())
             			{
@@ -2732,6 +2775,15 @@
     		if (typeof(goodyear_input.data("goodyearFormat")) != "undefined" && goodyear_input.data("goodyearFormat"))
     		{
     			options.format = goodyear_input.data("goodyearFormat");
+    		};
+    		
+    		if (typeof(goodyear_input.data("goodyearVisibleFormat")) != "undefined" && goodyear_input.data("goodyearVisibleFormat"))
+    		{
+    			options.visible_format = goodyear_input.data("goodyearVisibleFormat");
+    		} else 
+    		if (typeof(goodyear_input.data("goodyearFormat")) != "undefined" && goodyear_input.data("goodyearFormat"))
+    		{
+    			options.visible_format = goodyear_input.data("goodyearFormat");
     		};
     		
     		if (typeof(goodyear_input.data("goodyearMinYear")) != "undefined" && goodyear_input.data("goodyearMinYear"))
@@ -2902,7 +2954,7 @@
                 };
               
     			states.selected_date = selected_date;
-    			states.input_text_value = states.selected_date.format(options.format);
+    			states.input_text_value = states.selected_date.format(options.visible_format);
     		}
     		else if (states.today >= options.min_date && states.today <= options.max_date)
     		{

@@ -27,6 +27,10 @@
 	border:1px solid #CCC;
 }
 
+.goodyear-container .goodyear-hidden-text{
+	display: none;
+}
+
 .goodyear-container .goodyear-text{
 	margin: 0px!important;
     width: 100%!important;
@@ -309,7 +313,7 @@
 	height:269px;
 	top:0px;
 	left:327px;
-	width:30px;
+	width:31px;
 	border-left:1px solid #E5E5E5;
 }
 
