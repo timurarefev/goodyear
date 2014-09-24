@@ -59,7 +59,7 @@
 
 .goodyear-container .goodyear-picker{
 	width:320px;
-	height:271px;
+	height:270px;
 	position:absolute;
 	left:-1px;
 	background-color:#fff;
@@ -140,10 +140,10 @@
 
 .goodyear-container .goodyear-picker .goodyear-date-picker{
 	width:191px;
-	height:267px;
+	height:269px;
 	position:absolute;
 	left:3px;
-	top:1px;
+	top:0px;
 	overflow:hidden;
 	position:relative;
 	border-radius:5px;

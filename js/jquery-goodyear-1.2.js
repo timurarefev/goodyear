@@ -923,8 +923,9 @@
                         Вписываем значение в текстовое поле (на случай инвоука)
                     */
                     
-                    states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.visible_format));
-                    states.container.find(".goodyear-hidden-text").val(moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt(states.selected_date.format("D"), 10), states.selected_hour, states.selected_minute]).format(options.format));
+                    states.container.find(".goodyear-text").val(states.input_text_value);
+                    
+                    states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
         			
                     /*
                         Устанавливаем такую же дату в связанных input'ax
@@ -948,7 +949,12 @@
                                     
                                         if (states.selected_date > value.states.selected_date)
                                         {
-                                            value.states.selected_date = states.selected_date;                                    
+                                            value.states.selected_date = states.selected_date;   
+                                            
+                                            value.states.input_text_value = states.selected_date.format(value.options.visible_format);
+                                            
+                                            value.states.input_hidden_text_value = states.selected_date.format(value.options.format);
+                                            
                                             value.methods.set_date();
                                         };
                                     
@@ -980,6 +986,10 @@
                                         if (states.selected_date < value.states.selected_date)
                                         {
                                             value.states.selected_date = states.selected_date;  
+                                            
+                                            value.states.input_text_value = states.selected_date.format(value.options.visible_format);
+                                            
+                                            value.states.input_hidden_text_value = states.selected_date.format(value.options.format);
                                                                               
                                             value.methods.set_date();
                                         };
@@ -2958,6 +2968,7 @@
               
     			states.selected_date = selected_date;
     			states.input_text_value = states.selected_date.format(options.visible_format);
+    			
     		}
     		else if (states.today >= options.min_date && states.today <= options.max_date)
     		{
