@@ -137,7 +137,6 @@
         		
         			return "\
         			<div class='goodyear-container'>\
-        			<input class='goodyear-text'/>\
         			<div class='goodyear-icon'></div>\
         			<div class='goodyear-picker"+(options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "")+"'>\
         				<div class='goodyear-date-picker'>\
@@ -499,9 +498,15 @@
         			
         			element.wrapAll(container_template);	
         			
+        			var visible_element = element.clone();
+        			
         			element.removeClass("goodyear").addClass("goodyear-hidden-text");
         			
         			states.container = element.parent();
+        			
+        			visible_element.removeClass("goodyear").addClass("goodyear-text");
+        			
+        			visible_element.prependTo(states.container);
         			
         			states.container.find(".goodyear-text").val(states.input_text_value);
         			
