@@ -486,6 +486,12 @@
         							+ parseFloat($(element).css("padding-right"))
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
+        					
+        					$(element).css("height", parseFloat($(element).height())
+        							+ parseFloat($(element).css("padding-top"))
+        							+ parseFloat($(element).css("padding-bottom"))
+        							+ parseFloat($(element).css("border-top-width"))
+        							+ parseFloat($(element).css("border-bottom-width")));
         				break;
         				
         				case "padding-box" :
@@ -493,6 +499,10 @@
         							parseFloat($(element).width())
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
+        					
+        					$(element).css("height", parseFloat($(element).height())
+        							+ parseFloat($(element).css("border-top-width"))
+        							+ parseFloat($(element).css("border-bottom-width")));
         				break;			
         			}
         			
