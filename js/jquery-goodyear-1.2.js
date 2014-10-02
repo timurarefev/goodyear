@@ -514,7 +514,7 @@
         			
         			states.container = element.parent();
         			
-        			visible_element.removeClass("goodyear").addClass("goodyear-text");
+        			visible_element.removeAttr("name").removeClass("goodyear").addClass("goodyear-text");
         			
         			visible_element.prependTo(states.container);
         			
@@ -2983,6 +2983,8 @@
               
     			states.selected_date = selected_date;
     			states.input_text_value = states.selected_date.format(options.visible_format);
+                states.input_hidden_text_value = states.selected_date.format(options.format);
+                
     			
     		}
     		else if (states.today >= options.min_date && states.today <= options.max_date)
@@ -2994,6 +2996,7 @@
     			
     			states.selected_date = states.today;
     			states.input_text_value = goodyear_input.val();
+                states.input_hidden_text_value = goodyear_input.val();
     						
     		} else
     		{
@@ -3003,6 +3006,7 @@
     			
     			states.selected_date = options.min_date;
     			states.input_text_value = goodyear_input.val();
+                states.input_hidden_text_value = goodyear_input.val();
     			
     		};
             
