@@ -2740,51 +2740,64 @@
         		
         		date_pick : function(){
         		
-        			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
+                var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
         			
-        			date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").not(".disabled").mousedown(function(){
+                date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function(){
         				
-        				states.container.removeClass("goodyear-error");
+                    if (!$(this).hasClass("disabled"))
+                    {
+                        states.container.removeClass("goodyear-error");
+                    };
         				
         			}).mouseleave(function(){
         				
-        				if (states.input_text_error)
-        				{
-        					states.container.addClass("goodyear-error");
-        				};
+                    if (!$(this).hasClass("disabled"))
+                    {
+                  
+                        if (states.input_text_error)
+                        {
+                           states.container.addClass("goodyear-error");
+                        };
+                  
+                    };
         				
         			}).click(function(){
-        				
-        				states.container.removeClass("goodyear-error");
-        				
-        				states.input_text_error = false;
-        			  
-        				states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
-        				
-        				states.input_text_value = states.selected_date.format(options.visible_format);
-        				states.input_hidden_text_value = states.selected_date.format(options.format);
-        				
-        				states.container.find(".goodyear-text").val(states.input_text_value);
-        				states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-        				
-        				methods.set_date();
-        				
-        				states.container.find(".goodyear-text").focus();
-        				
-        				if (!states.is_mobile)
-        				{
-        					setTimeout(function(){
-        						states.container.find(".goodyear-text")[0].select();
-        					}, 1);
-        				};
-        				
-        				states.container.find(".goodyear-picker").css("zIndex", 1);
-        					
-        				states.container.find(".goodyear-picker").fadeOut(100);		
-        				
-        				states.picker_open = false;	
-        			  
-        			});
+                   
+                    if (!$(this).hasClass("disabled"))
+                    {
+                   
+                        states.container.removeClass("goodyear-error");
+
+                        states.input_text_error = false;
+
+                        states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
+
+                        states.input_text_value = states.selected_date.format(options.visible_format);
+                        states.input_hidden_text_value = states.selected_date.format(options.format);
+
+                        states.container.find(".goodyear-text").val(states.input_text_value);
+                        states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+
+                        methods.set_date();
+
+                        states.container.find(".goodyear-text").focus();
+
+                        if (!states.is_mobile)
+                        {
+                           setTimeout(function(){
+                              states.container.find(".goodyear-text")[0].select();
+                           }, 1);
+                        };
+
+                        states.container.find(".goodyear-picker").css("zIndex", 1);
+
+                        states.container.find(".goodyear-picker").fadeOut(100);		
+
+                        states.picker_open = false;	
+                        
+                    };
+                   
+        			});  
         		
         		},	
         		
@@ -3058,23 +3071,23 @@
     		else if (states.today >= options.min_date && states.today <= options.max_date)
     		{
     			
-    			/*
-    				Если сегодня попадает в разрешенный диапазон
-    			*/
-    			
-    			states.selected_date = states.today;
-    			states.input_text_value = goodyear_input.val();
-                states.input_hidden_text_value = goodyear_input.val();
+                    /*
+                            Если сегодня попадает в разрешенный диапазон
+                    */
+
+                    states.selected_date = states.today;
+                    states.input_text_value = goodyear_input.val();
+                    states.input_hidden_text_value = goodyear_input.val();
     						
     		} else
     		{
-    			/*
-    				Если нет, выбраной датой будет считаться дата начала разрешенного диапазона
-    			*/
-    			
-    			states.selected_date = options.min_date;
-    			states.input_text_value = goodyear_input.val();
-                states.input_hidden_text_value = goodyear_input.val();
+                    /*
+                            Если нет, выбраной датой будет считаться дата начала разрешенного диапазона
+                    */
+
+                    states.selected_date = options.min_date;
+                    states.input_text_value = goodyear_input.val();
+                    states.input_hidden_text_value = goodyear_input.val();
     			
     		};
             
