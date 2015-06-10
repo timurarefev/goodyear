@@ -9,21 +9,28 @@
     
     var init = function(element, options){
         
-        if ($(element).length > 1)
-        {
-            
-          $(element).each(function(){
-            
-            init_single(this, options);
-            
-          });
-            
-        } else
-        {
-          
-          init_single(element, options);
-            
-        };
+        //
+        //  Устраняем проблему в safari
+        //        
+        setTimeout(function(){
+        
+            if ($(element).length > 1)
+            {
+
+              $(element).each(function(){
+
+                init_single(this, options);
+
+              });
+
+            } else
+            {
+
+              init_single(element, options);
+
+            };
+        
+        }, 1);
         
     };
     		
@@ -476,7 +483,31 @@
         			switch ($(element).css("box-sizing"))
         			{			
         				case "border-box" :
-        					container_template.css("width", $(element).css("width"));
+                                                
+                                                //
+                                                //  Ширина может быть явно не задана в css
+                                                //
+                                                
+                                                var css_width = $(element).css("width");
+                        
+                                                if (
+                                                    typeof(css_width) == "undefined" ||
+                                                    (
+                                                        parseInt(css_width, 10) == 0 &&
+                                                        css_width.substr(css_width.length - 2) == "px"
+                                                    )
+                                                )
+                                                {                                
+                                                   // 
+                                                   // В таком случае берем просто вычисленную ширину элемента 
+                                                   //
+                                                   
+                                                   container_template.css("width", $(element).width());  
+                                                } else
+                                                {
+                                                   container_template.css("width", css_width);                                
+                                                };
+
         				break;
         				
         				case "content-box" :
@@ -720,27 +751,46 @@
                         	
                             $.each(activated_goodyears_list, function(index, goodyear_element){
                                
-                               if (goodyear_element.states.drag_item)
-                               drag_item = true;
+                                //
+                                //  Принудительно закрываем все уже открытые goodyears
+                                //
+                               
+                                if (goodyear_element.states.picker_open)
+                                { 
+                                   goodyear_element.states.container.find(".goodyear-hidden-text").triggerHandler("blur");
+                                }; 
+                               
+                                if (goodyear_element.states.drag_item)
+                                drag_item = true;
                                 
                             });
                             
-            				if (!drag_item)
-            				{
-            					
-            					$(".goodyear-picker").css("zIndex", 1);
-            					
-            					$(".goodyear-picker").fadeOut(100);
-                                
+                            if (!drag_item)
+                            {
+
+                                $(".goodyear-picker").css("zIndex", 1);
+
+                                $(".goodyear-picker").fadeOut(100);
+
                                 $.each(activated_goodyears_list, function(index, goodyear_element){
-                               
+
                                    goodyear_element.states.picker_open = false;
-                                
+
                                 });
+
+                            };
             				
-            				};
-            				
-            			});
+                        });
+                        
+                        //
+                        //  На случай ухода из окна в другое окно
+                        //
+                        
+                        $(window).blur(function(){
+                           
+                           $("html").trigger("mouseup");
+                            
+                        });
                     
                     };
                     
@@ -941,6 +991,8 @@
                     states.container.find(".goodyear-text").val(states.input_text_value);
                     
                     states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                    
+                    states.container.removeClass("goodyear-error");
         			
                     /*
                         Устанавливаем такую же дату в связанных input'ax
@@ -1100,8 +1152,8 @@
                         
                         var current_month_disabled = true;
         
-        				for (day = 1; day <= 31; day++)
-        				{
+                        for (day = 1; day <= 31; day++)
+                        {
                             
                             var current_date = moment([states.displayed_year, month_num, day]);
                             
@@ -1119,15 +1171,15 @@
                                 date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").addClass("disabled");                        
                             };
                             
-        					if (day <= days_count)
-        					{
-        						date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "inline");
-        					} else
-        					{
-        						date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "none");
-        					};
+                            if (day <= days_count)
+                            {
+                                    date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "inline");
+                            } else
+                            {
+                                    date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "none");
+                            };
         					
-        				};
+                        };
                         
                         if (current_month_disabled)
                         {
@@ -1156,6 +1208,12 @@
         		show_and_hide_picker : function(){
         			
         			states.container.find(".goodyear-text").focus(function(){
+                                        
+                                        //
+                                        //  Выполняем заданный пользователем извне focus event
+                                        //
+                                        
+                                        states.container.find(".goodyear-hidden-text").triggerHandler("focus");
         			  
         				if ($("html").width() - states.container.offset().left - states.container.width() < states.container.find(".goodyear-picker").width())
         				{
@@ -1277,7 +1335,11 @@
         					states.input_hidden_text_value = states.selected_date.format(options.format);
         					methods.set_date();
         					states.container.find(".goodyear-text").val(states.input_text_value);
-        					states.container.find(".goodyear-text").val(states.input_hidden_text_value);
+        	    				states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                                                //
+                                                //  Выполняем заданный пользователем извне change event
+                                                //
+                                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
         					states.container.removeClass("goodyear-error");
         					states.input_text_error = false;
         				};			
@@ -2059,6 +2121,7 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2169,6 +2232,7 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);	
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2288,6 +2352,7 @@
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);
                                 states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2371,6 +2436,7 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2481,6 +2547,7 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2600,6 +2667,7 @@
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);	
                                 states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);	
+                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
                                 
                                 if (!states.is_mobile)
                 				{

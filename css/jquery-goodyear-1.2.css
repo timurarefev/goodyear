@@ -28,7 +28,7 @@
 }
 
 .goodyear-container .goodyear-hidden-text{
-	display: none;
+	display: none!important;
 }
 
 .goodyear-container .goodyear-text{
