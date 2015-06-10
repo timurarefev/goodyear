@@ -1,5 +1,5 @@
 ﻿/*
- * Goodyear 1.2
+ * Goodyear 1.3
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
