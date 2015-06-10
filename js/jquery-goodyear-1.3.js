@@ -2876,7 +2876,7 @@
     			Формат, переданный в data
     		*/
             
-        	if (typeof(goodyear_input.data("goodyearNoIcon")) != "undefined" && goodyear_input.data("noIcon") == true)
+        	if (typeof(goodyear_input.data("goodyearNoIcon")) != "undefined" && goodyear_input.data("goodyearNoIcon") == true)
         	{
         		options.no_icon = true;
         	} else
