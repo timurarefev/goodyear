@@ -149,7 +149,7 @@
         		
         			return "\
         			<div class='goodyear-container'>\
-        			<div class='goodyear-icon'></div>\
+        			" + (!options.no_icon ? "<div class='goodyear-icon'></div>" : "") + "\
         			<div class='goodyear-picker"+(options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "")+"'>\
         				<div class='goodyear-date-picker'>\
         					<div class='goodyear-slider'>\
@@ -2876,12 +2876,20 @@
     			Формат, переданный в data
     		*/
             
-            if (typeof(goodyear_input.data("goodyearRangeFrom")) != "undefined" && typeof(goodyear_input.data("goodyearRangeFrom")))
+        	if (typeof(goodyear_input.data("noIcon")) != "undefined" && goodyear_input.data("noIcon") == "true")
+        	{
+        		options.no_icon = true;
+        	} else
+        	{
+        		options.no_icon = false;
+        	};
+        	
+            if (typeof(goodyear_input.data("goodyearRangeFrom")) != "undefined" && goodyear_input.data("goodyearRangeFrom"))
             {
                 options.range_from_id = parseInt(goodyear_input.data("goodyearRangeFrom"), 10);
             };
             
-            if (typeof(goodyear_input.data("goodyearRangeTo")) != "undefined" && typeof(goodyear_input.data("goodyearRangeTo")))
+            if (typeof(goodyear_input.data("goodyearRangeTo")) != "undefined" && goodyear_input.data("goodyearRangeTo"))
             {
                 options.range_to_id = parseInt(goodyear_input.data("goodyearRangeTo"), 10);
             };
