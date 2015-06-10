@@ -18,16 +18,21 @@
             {
 
               $(element).each(function(){
-
-                init_single(this, options);
-
+                
+                if ($(this).is("input"))
+                {
+                    init_single(this, options);
+                };
+                
               });
 
             } else
             {
-
-              init_single(element, options);
-
+                if ($(element).is("input"))
+                {
+                    init_single(element, options);
+                };
+                
             };
         
         }, 1);
@@ -37,7 +42,7 @@
     var init_single = function(element, options){
         
         var goodyear_input = $(element);
-        
+                
         var found_goodyear_id = 0;
         
         if (typeof(activated_goodyears_list) != "undefined")
