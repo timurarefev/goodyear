@@ -557,8 +557,6 @@
         			states.container.find(".goodyear-text").val(states.input_text_value);
         			
         			states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-        			states.container.find(".goodyear-hidden-text").triggerHandler("change");
-        			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
         			
         			if (states.input_text_value == states.selected_date.format(options.visible_format))
         			{
@@ -997,8 +995,13 @@
                     
                     states.container.find(".goodyear-text").val(states.input_text_value);
                     
-                    states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                    states.container.find(".goodyear-hidden-text").triggerHandler("change");
+                    if (states.input_hidden_text_value != states.container.find(".goodyear-hidden-text").val())
+                    {                        
+                        states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                        
+                        states.container.find(".goodyear-hidden-text").triggerHandler("change");
+                    };
+                    
         			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                     
                     states.container.removeClass("goodyear-error");
@@ -1343,10 +1346,6 @@
         					states.input_text_value = states.selected_date.format(options.visible_format);
         					states.input_hidden_text_value = states.selected_date.format(options.format);
         					methods.set_date();
-        					states.container.find(".goodyear-text").val(states.input_text_value);
-        	    			states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                 			
         					states.container.removeClass("goodyear-error");
         					states.input_text_error = false;
@@ -2129,8 +2128,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                             
                             if (!states.is_mobile)
             				{
@@ -2241,8 +2238,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);	
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                             
                             if (!states.is_mobile)
             				{
@@ -2362,8 +2357,6 @@
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);
                                 states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                    			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2447,8 +2440,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                             
                             if (!states.is_mobile)
             				{
@@ -2559,8 +2550,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
                             
                             if (!states.is_mobile)
             				{
@@ -2679,9 +2668,7 @@
                                 states.input_hidden_text_value = states.selected_date.format(options.format);
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);	
-                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);	
-                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
-                    			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
+                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2788,11 +2775,6 @@
 
                         states.input_text_value = states.selected_date.format(options.visible_format);
                         states.input_hidden_text_value = states.selected_date.format(options.format);
-
-                        states.container.find(".goodyear-text").val(states.input_text_value);
-                        states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                        states.container.find(".goodyear-hidden-text").triggerHandler("change");
-            			states.container.find(".goodyear-hidden-text").triggerHandler("blur");
 
                         methods.set_date();
 
