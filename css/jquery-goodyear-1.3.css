@@ -6,6 +6,13 @@
 	user-select: none;
 }
 
+.disable_selection::selection {
+    background: transparent; /* Safari */
+}
+.disable_selection::-moz-selection {
+    background: transparent; /* Firefox */
+}
+
 .goodyear-container{
 	display:inline-block;
 	position:relative;
@@ -469,7 +476,7 @@
 	position:absolute;
 	background-color:#f0f0f0;
 	width:58px;
-	height:43px;
+	height:55px;
 	top:0px;
 	border-radius:5px;
 	left:1px;

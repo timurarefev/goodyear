@@ -1,69 +1,67 @@
-п»ї/*
- * Goodyear 1.3
+/*
+ * Goodyear
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
  
 (function($){
-  jQuery.fn.goodyear = function(options){
+  jQuery.fn.goodyear = function(options, methods_params){
     
-    var init = function(element, options){
-        
-        //
-        //  РЈСЃС‚СЂР°РЅСЏРµРј РїСЂРѕР±Р»РµРјСѓ РІ safari
-        //        
-        setTimeout(function(){
-        
-            if ($(element).length > 1)
-            {
+    var init = function(element, options, methods_params){
+                
+        if ($(element).length > 1)
+        {
 
-              $(element).each(function(){
-                
-                if ($(this).is("input"))
-                {
-                    init_single(this, options);
-                };
-                
-              });
-
-            } else
+          $(element).each(function(){
+            
+            if ($(this).is("input"))
             {
-                if ($(element).is("input"))
-                {
-                    init_single(element, options);
-                };
-                
+                init_single(this, options, methods_params);
             };
-        
-        }, 1);
+            
+          });
+
+        } else
+        {
+            if ($(element).is("input"))
+            {
+                return init_single(element, options, methods_params);
+            };
+            
+        };
         
     };
     		
-    var init_single = function(element, options){
+    var init_single = function(element, options, methods_params){
         
         var goodyear_input = $(element);
                 
-        var found_goodyear_id = 0;
+        var found_goodyear_id = false;        
         
         if (typeof(activated_goodyears_list) != "undefined")
         $.each(activated_goodyears_list, function(index, value){
-            
-            if (value.element == goodyear_input)
+                            
+            if (value.element[0] == goodyear_input[0])
             {
                 found_goodyear_id = index;
             };
             
         });
         
-        if (found_goodyear_id)
+        if (found_goodyear_id !== false)
         {
-            /*
-            if (typeof(options) != "undefined" && typeof(options.method) != "undefined")
+            
+            //
+            //  Выполнение методов для уже активированного goodyear
+            //
+                        
+            
+            if (typeof(options) != "undefined" && options)
             {
             
-                switch (options.method)
+                switch (options)
                 {
-            
+                    /*
                     case "set_min_date":
                     
                       
@@ -85,12 +83,64 @@
                         activated_goodyears_list[found_goodyear_id].methods["set_date"];
                         
                     break;
+                    */
+                    
+                    case "set_date":
+                    
+                        activated_goodyears_list[found_goodyear_id].states.selected_date = activated_goodyears_list[found_goodyear_id].methods.string_to_date(methods_params); 
+                        
+                        activated_goodyears_list[found_goodyear_id].states.input_text_value = activated_goodyears_list[found_goodyear_id].states.selected_date.format(activated_goodyears_list[found_goodyear_id].options.visible_format);
+                        
+                        activated_goodyears_list[found_goodyear_id].states.input_hidden_text_value = activated_goodyears_list[found_goodyear_id].states.selected_date.format(activated_goodyears_list[found_goodyear_id].options.format);
+                        
+                        activated_goodyears_list[found_goodyear_id].states.container.find(".goodyear-text").val(activated_goodyears_list[found_goodyear_id].states.input_text_value);
+        			
+            			activated_goodyears_list[found_goodyear_id].states.container.find(".goodyear-hidden-text").val(activated_goodyears_list[found_goodyear_id].states.input_hidden_text_value);
+            			
+            			if (activated_goodyears_list[found_goodyear_id].states.input_text_value == activated_goodyears_list[found_goodyear_id].states.selected_date.format(activated_goodyears_list[found_goodyear_id].options.visible_format))
+            			{
+            				activated_goodyears_list[found_goodyear_id].states.container.removeClass("goodyear-error");
+            				
+            				activated_goodyears_list[found_goodyear_id].states.input_text_error = false;
+            				
+            			} else
+            			{
+            				if (activated_goodyears_list[found_goodyear_id].states.input_text_value)
+            				{
+            					activated_goodyears_list[found_goodyear_id].states.container.addClass("goodyear-error");
+            				
+            					activated_goodyears_list[found_goodyear_id].states.input_text_error = true;
+            				};
+            			};
+                        
+                        activated_goodyears_list[found_goodyear_id].methods.set_date();
+                    
+                    break;
+                    
+                    case "get_date":
+                        
+                        if (typeof(methods_params) != "undefined")
+                        {
+                            var format = methods_params;
+                        } else
+                        {
+                            var format = activated_goodyears_list[found_goodyear_id].options.format;
+                        };
+                        
+                        return activated_goodyears_list[found_goodyear_id].states.selected_date.format(format);
+                    
+                    break;
+                    
+                    case "focus":
+                    
+                        activated_goodyears_list[found_goodyear_id].states.container.find(".goodyear-text").trigger("focus");
+                    
+                    break;
                 
                 };            
                 
             
-            };           
-            */
+            };   
         
         } else
         {
@@ -99,7 +149,7 @@
     		
         		format : "YYYY-MM-DD",
         		
-        		visible_format : "D MMMM YYYY Рі.",
+        		visible_format : "D MMMM YYYY г.",
         		
         		minutes_step : 5			
     		
@@ -121,7 +171,7 @@
         		
         		month_block_height : 240,
         		
-        		month_slider_height : 43,
+        		month_slider_height : 55,
         		
         		month_slider_top_manual_correction : 1,
         		
@@ -149,7 +199,7 @@
         		
         			return "\
         			<div class='goodyear-container'>\
-        			<div class='goodyear-icon'></div>\
+        			" + (!options.no_icon ? "<div class='goodyear-icon'></div>" : "") + "\
         			<div class='goodyear-picker"+(options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "")+"'>\
         				<div class='goodyear-date-picker'>\
         					<div class='goodyear-slider'>\
@@ -454,29 +504,29 @@
         	
         	var presets = {
         		months_en : ["january", "febrary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
-        		months_ru : ["СЏРЅРІР°СЂСЊ", "С„РµРІСЂР°Р»СЊ", "РјР°СЂС‚", "Р°РїСЂРµР»СЊ", "РјР°Р№", "РёСЋРЅСЊ", "РёСЋР»СЊ", "Р°РІРіСѓСЃС‚", "СЃРµРЅС‚СЏР±СЂСЊ", "РѕРєС‚СЏР±СЂСЊ", "РЅРѕСЏР±СЂСЊ", "РґРµРєР°Р±СЂСЊ"],
-        		months_ru_short : ["СЏРЅРІ", "С„РµРІ", "РјР°СЂ", "Р°РїСЂ", "РјР°Р№", "РёСЋРЅСЊ", "РёСЋР»СЊ", "Р°РІРі", "СЃРµРЅ", "РѕРєС‚", "РЅРѕСЏ", "РґРµРє"],
-        		months_ru_genitive : ["СЏРЅРІР°СЂСЏ", "С„РµРІСЂР°Р»СЏ", "РјР°СЂС‚Р°", "Р°РїСЂРµР»СЏ", "РјР°СЏ", "РёСЋРЅСЏ", "РёСЋР»СЏ", "Р°РІРіСѓСЃС‚Р°", "СЃРµРЅС‚СЏР±СЂСЏ", "РѕРєС‚СЏР±СЂСЏ", "РЅРѕСЏР±СЂСЏ", "РґРµРєР°Р±СЂСЏ"],
-        		days_of_week : ["Рџ", "Р’", "РЎ", "Р§", "Рџ", "РЎ", "Р’"],
+        		months_ru : ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"],
+        		months_ru_short : ["янв", "фев", "мар", "апр", "май", "июнь", "июль", "авг", "сен", "окт", "ноя", "дек"],
+        		months_ru_genitive : ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+        		days_of_week : ["П", "В", "С", "Ч", "П", "С", "В"],
         		common_date_formats : [["D M", "DD M", "DD MM", "D-M", "DD-M", "DD-MM","D.M", "DD.M", "DD.MM","D\\M", "DD\\M", "DD\\MM","D/M", "DD/M", "DD/MM", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "YY M D", "YY M DD", "YY MM DD","YYYY M D", "YYYY M DD", "YYYY MM DD", "YY-M-D", "YY-M-DD", "YY-MM-DD","YYYY-M-D", "YYYY-M-DD", "YYYY-MM-DD", "YY.M.D", "YY.M.DD", "YY.MM.DD","YYYY.M.D", "YYYY.M.DD", "YYYY.MM.DD", "YY\\M\\D", "YY\\M\\DD", "YY\\MM\\DD","YYYY\\M\\D", "YYYY\\M\\DD", "YYYY\\MM\\DD", "YY/M/D", "YY/M/DD", "YY/MM/DD","YYYY/M/D", "YYYY/M/DD", "YYYY/MM/DD", "YY D M", "YY DD M", "YY DD MM","YYYY D M", "YYYY DD MM", "YYYY DD MM", "YY-D-M", "YY-DD-M", "YY-DD-MM","YYYY-D-M", "YYYY-DD-MM", "YYYY-DD-MM", "YY.D.M", "YY.DD.M", "YY.DD.MM","YYYY.D.M", "YYYY.DD.MM", "YYYY.DD.MM", "YY\\D\\M", "YY\\DD\\M", "YY\\DD\\MM","YYYY\\D\\M", "YYYY\\DD\\MM", "YYYY\\DD\\MM", "YY/D/M", "YY/DD/M", "YY/DD/MM","YYYY/D/M", "YYYY/DD/MM", "YYYY/DD/MM", "D MMM", "DD MMM", "D M HH:mm", "DD M HH:mm", "DD MM HH:mm", "D-M HH:mm", "DD-M HH:mm", "DD-MM HH:mm","D.M HH:mm", "DD.M HH:mm", "DD.MM HH:mm","D\\M HH:mm", "DD\\M HH:mm", "DD\\MM HH:mm","D/M HH:mm", "DD/M HH:mm", "DD/MM HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "YY M D HH:mm", "YY M DD HH:mm", "YY MM DD HH:mm","YYYY M D HH:mm", "YYYY M DD HH:mm", "YYYY MM DD HH:mm", "YY-M-D HH:mm", "YY-M-DD HH:mm", "YY-MM-DD HH:mm","YYYY-M-D HH:mm", "YYYY-M-DD HH:mm", "YYYY-MM-DD HH:mm", "YY.M.D HH:mm", "YY.M.DD HH:mm", "YY.MM.DD HH:mm","YYYY.M.D HH:mm", "YYYY.M.DD HH:mm", "YYYY.MM.DD HH:mm", "YY\\M\\D HH:mm", "YY\\M\\DD HH:mm", "YY\\MM\\DD HH:mm","YYYY\\M\\D HH:mm", "YYYY\\M\\DD HH:mm", "YYYY\\MM\\DD HH:mm", "YY/M/D HH:mm", "YY/M/DD HH:mm", "YY/MM/DD HH:mm","YYYY/M/D HH:mm", "YYYY/M/DD HH:mm", "YYYY/MM/DD HH:mm", "YY D M HH:mm", "YY DD M HH:mm", "YY DD MM HH:mm","YYYY D M HH:mm", "YYYY DD MM HH:mm", "YYYY DD MM HH:mm", "YY-D-M HH:mm", "YY-DD-M HH:mm", "YY-DD-MM HH:mm","YYYY-D-M HH:mm", "YYYY-DD-MM HH:mm", "YYYY-DD-MM HH:mm", "YY.D.M HH:mm", "YY.DD.M HH:mm", "YY.DD.MM HH:mm","YYYY.D.M HH:mm", "YYYY.DD.MM HH:mm", "YYYY.DD.MM HH:mm", "YY\\D\\M HH:mm", "YY\\DD\\M HH:mm", "YY\\DD\\MM HH:mm","YYYY\\D\\M HH:mm", "YYYY\\DD\\MM HH:mm", "YYYY\\DD\\MM HH:mm", "YY/D/M HH:mm", "YY/DD/M HH:mm", "YY/DD/MM HH:mm","YYYY/D/M HH:mm", "YYYY/DD/MM HH:mm", "YYYY/DD/MM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY", "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "D MMM", "DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm", "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY",   "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm",   "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm"]],
         		common_date_langs : ["ru", "en"]
         	};
         	
         	var states = {
-        		input_text_value : null, //С‚РµРєСѓС‰Р°СЏ Р·Р°РїРёСЃСЊ РІ input'e
-        		selected_date : null, //РІС‹Р±СЂР°РЅРЅР°СЏ РґР°С‚Р° РІ С„РѕСЂРјР°С‚Рµ moment
-        		today : null, //СЃРµРіРѕРґРЅСЏ РІ С„РѕСЂРјР°С‚Рµ moment
-        		displayed_year : null, //РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РіРѕРґ
-                selected_hour : null, //РІС‹Р±СЂР°РЅРЅС‹Р№ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ С‡Р°СЃ
-                selected_minute : null, //РІС‹Р±СЂР°РЅРЅР°СЏ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РјРёРЅСѓС‚Р°
-        		container : null, //РєРѕРЅС‚РµР№РЅРµСЂ СЃРѕ РІСЃРµРј СЃРѕРґРµСЂР¶РёРјС‹Рј
-        		drag_item : null, //РїРµСЂРµС‚СЏРіРёРІР°РµРјС‹Р№ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ СЌР»РµРјРµРЅС‚
-        		drag_start_pos_y : null, // РЅР°С‡Р°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РїСЂРё РїРµСЂРµС‚СЏРіРёРІР°РЅРёРё
-        		drag_start_element_top : null, //РЅР°С‡Р°Р»СЊРЅР°СЏ РїРѕР·РёС†РёСЏ СЌР»РµРјРµРЅС‚Р°
+        		input_text_value : null, //текущая запись в input'e
+        		selected_date : null, //выбранная дата в формате moment
+        		today : null, //сегодня в формате moment
+        		displayed_year : null, //отображаемый в данный момент год
+                selected_hour : null, //выбранный в данный момент час
+                selected_minute : null, //выбранная в данный момент минута
+        		container : null, //контейнер со всем содержимым
+        		drag_item : null, //перетягиваемый в данный момент элемент
+        		drag_start_pos_y : null, // начальное состояние при перетягивании
+        		drag_start_element_top : null, //начальная позиция элемента
         		drag_started : null,
         		is_mobile : null,
-        		input_text_error : null,// РЅР°С…РѕРґРёС‚СЃСЏ РІ СЃРѕСЃС‚РѕСЏРЅРёРё РѕС€РёР±РєРё (РЅРµ СЂР°СЃРїРѕР·РЅР°РЅР° РґР°С‚Р°),
-        		mousewheel : null//РїРѕРґРєР»СЋС‡РµРЅ РїР»Р°РіРёРЅ mousewheel
+        		input_text_error : null,// находится в состоянии ошибки (не распознана дата),
+        		mousewheel : null//подключен плагин mousewheel
         	};
         	
         	var methods = {
@@ -490,7 +540,7 @@
         				case "border-box" :
                                                 
                                                 //
-                                                //  РЁРёСЂРёРЅР° РјРѕР¶РµС‚ Р±С‹С‚СЊ СЏРІРЅРѕ РЅРµ Р·Р°РґР°РЅР° РІ css
+                                                //  Ширина может быть явно не задана в css
                                                 //
                                                 
                                                 var css_width = $(element).css("width");
@@ -504,7 +554,7 @@
                                                 )
                                                 {                                
                                                    // 
-                                                   // Р’ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ Р±РµСЂРµРј РїСЂРѕСЃС‚Рѕ РІС‹С‡РёСЃР»РµРЅРЅСѓСЋ С€РёСЂРёРЅСѓ СЌР»РµРјРµРЅС‚Р° 
+                                                   // В таком случае берем просто вычисленную ширину элемента 
                                                    //
                                                    
                                                    container_template.css("width", $(element).width());  
@@ -579,19 +629,19 @@
         			states.is_mobile = is_mobile.test(navigator.userAgent);
         						
         			/*
-        				РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїРѕР·РёС†РёРё РІ РєР°Р»РµРЅРґР°СЂРµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ РІС‹Р±СЂР°РЅРЅРѕР№ РґР°С‚РѕР№
+        				Устанавливаем позиции в календаре в соответствии с выбранной датой
         			*/
         			
         			methods.set_date();
         
         			/*
-        				РќР°РІРµРґРµРЅРёРµ РЅР° input
+        				Наведение на input
         			*/
         			
         			methods.input_icon_hover();
         			
         			/*
-        				РђРєС‚РёРІРёСЂСѓРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РѕС‚РєСЂС‹С‚СЊ Рё Р·Р°РєСЂС‹С‚СЊ РІС‹Р±РѕСЂ РґР°С‚С‹
+        				Активируем возможность открыть и закрыть выбор даты
         			*/
         			
         			if (!states.is_mobile)
@@ -602,67 +652,67 @@
         			};
         			
         			/*
-        				Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РґР°С‚С‹ РїСЂРё СѓРІРѕРґРµ С„РѕРєСѓСЃР°
+        				Форматирование даты при уводе фокуса
         			*/
         			
         			methods.set_date_on_blur();
         		  
         			/*
-        				РџРѕРґСЃРІРµС‚РєР° РјРµСЃСЏС†Р° РїСЂРё РЅР°РІРµРґРµРЅРёРё
+        				Подсветка месяца при наведении
         			*/
         		  
         			methods.months_hover();
         
         		    /*
-        				РљР»РёРє РїРѕ РјРµСЃСЏС†Сѓ
+        				Клик по месяцу
         		    */
         		  
         		  	methods.months_click();
         		  
         			/*
-        				РџСЂРѕРєСЂСѓС‚РєР° РјРµСЃСЏС†Р° РїРµСЂРµС‚СЏРіРёРІР°РЅРёРµРј
+        				Прокрутка месяца перетягиванием
         			*/
         		  
         		 	methods.months_drag();
         		  
         			/*
-        				РџСЂРѕРєСЂСѓС‚РєР° РјРµСЃСЏС†РµРІ
+        				Прокрутка месяцев
         			*/
         		  
         			methods.months_mousewheel();
         			
         			/*
-        				РџСЂРѕРєСЂСѓС‚РєР° РјРµСЃСЏС†РµРІ С‚Р°С‡РµРј
+        				Прокрутка месяцев тачем
         			*/
         		  
         			//methods.months_touch();
         		  
         			/*
-        				РџРѕРґСЃРІРµС‚РєР° РіРѕРґР° РїСЂРё РЅР°РІРµРґРµРЅРёРё
+        				Подсветка года при наведении
         			*/
         			
         			methods.year_mouseenter();
         		  
         			/*
-        				РљР»РёРє РїРѕ РіРѕРґСѓ
+        				Клик по году
         			*/
         		  
         			methods.year_click();
         		  
         			/*
-        				РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РіРѕРґР°
+        				Перетягивание года
         			*/
         		  
         			methods.year_drag();
         			
         			/*
-        				РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РіРѕРґР°
+        				Перетягивание года
         			*/
         		  
         			//methods.year_touch();
         		  
         			/*
-        				РџСЂРѕРєСЂСѓС‚РєР° РіРѕРґР° РјС‹С€СЊСЋ
+        				Прокрутка года мышью
         			*/
         		  
         			methods.year_mousewheel();
@@ -671,25 +721,25 @@
         			{
         			
 	                    /*
-	        				РџРѕРґСЃРІРµС‚РєР° С‡Р°СЃР° РїСЂРё РЅР°РІРµРґРµРЅРёРё
+	        				Подсветка часа при наведении
 	        			*/
 	        			
 	        			methods.hour_mouseenter();
 	                    
 	                    /*
-	        				РљР»РёРє РїРѕ С‡Р°СЃСѓ
+	        				Клик по часу
 	        			*/
 	        		  
 	        			methods.hour_click();
 	                    
 	                    /*
-	        				РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ С‡Р°СЃР°
+	        				Перетягивание часа
 	        			*/
 	        		  
 	        			methods.hour_drag();
 	                    
 	                    /*
-	        				РџСЂРѕРєСЂСѓС‚РєР° С‡Р°СЃР° РјС‹С€СЊСЋ
+	        				Прокрутка часа мышью
 	        			*/
 	        		  
 	        			methods.hour_mousewheel();
@@ -698,25 +748,25 @@
 	        			{
 	        			
 		                    /*
-		        				РџРѕРґСЃРІРµС‚РєР° РјРёРЅСѓС‚С‹ РїСЂРё РЅР°РІРµРґРµРЅРёРё
+		        				Подсветка минуты при наведении
 		        			*/
 		        			
 		        			methods.minute_mouseenter();
 		                    
 		                    /*
-		        				РљР»РёРє РїРѕ РјРёРЅСѓС‚Рµ
+		        				Клик по минуте
 		        			*/
 		        		  
 		        			methods.minute_click();
 		                    
 		                    /*
-		        				РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РјРёРЅСѓС‚С‹
+		        				Перетягивание минуты
 		        			*/
 		        		  
 		        			methods.minute_drag();
 		                    
 		                    /*
-		        				РџСЂРѕРєСЂСѓС‚РєР° С‡Р°СЃР° РјС‹С€СЊСЋ
+		        				Прокрутка часа мышью
 		        			*/
 		        		  
 		        			methods.minute_mousewheel();
@@ -726,18 +776,18 @@
         			};
 	        			
         			/*
-        				РџРѕРґСЃРІРµС‚РєР° РґР°С‚С‹ РїСЂРё РЅР°РІРµРґРµРЅРёРё
+        				Подсветка даты при наведении
         			*/
                   
         			methods.date_hover();
                     
         		  
         			/*
-        				Р’С‹Р±РѕСЂ РґР°С‚С‹
+        				Выбор даты
         			*/
         		  
         			methods.date_pick();
-                    
+                                        
                     return element;
         			
         		},
@@ -757,7 +807,7 @@
                             $.each(activated_goodyears_list, function(index, goodyear_element){
                                
                                 //
-                                //  РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ Р·Р°РєСЂС‹РІР°РµРј РІСЃРµ СѓР¶Рµ РѕС‚РєСЂС‹С‚С‹Рµ goodyears
+                                //  Принудительно закрываем все уже открытые goodyears
                                 //
                                
                                 if (goodyear_element.states.picker_open)
@@ -788,7 +838,7 @@
                         });
                         
                         //
-                        //  РќР° СЃР»СѓС‡Р°Р№ СѓС…РѕРґР° РёР· РѕРєРЅР° РІ РґСЂСѓРіРѕРµ РѕРєРЅРѕ
+                        //  На случай ухода из окна в другое окно
                         //
                         
                         $(window).blur(function(){
@@ -823,7 +873,7 @@
         		set_date : function(){
         			
         			/*
-        				РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        				Устанавливаем значение годов
         			*/
         			
         			var year_picker = states.container.find(".goodyear-year-picker");
@@ -852,7 +902,7 @@
         			states.displayed_year = parseInt(states.selected_date.format("YYYY"), 10);
         			
         			/*
-        				Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёР·РјРµРЅРµРЅРёСЏ РіРѕРґР° РјРµРЅСЏРµРј СЃРёС‚СѓР°С†РёСЋ РІ Р±Р»РѕРєРµ СЃ РґР°С‚Р°РјРё
+        				В результате изменения года меняем ситуацию в блоке с датами
         			*/
         			
         			if (states.displayed_year != prev_displayed_year)
@@ -862,7 +912,7 @@
         			};
         			
         			/*
-        				РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РІ Р±Р»РѕРєРµ РІС‹Р±РѕСЂР° РјРµСЃСЏС†Р°
+        				Устанавливаем значение в блоке выбора месяца
         			*/
         			
         			var month_slider = states.container.find(".goodyear-month-picker").find(".goodyear-slider");
@@ -878,7 +928,7 @@
         			month_slider_top = (block_model.month_block_height - block_model.month_slider_height);
         
         			/*
-        				РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РІ Р±Р»РѕРєРµ РІС‹Р±РѕСЂР° РґРЅСЏ
+        				Устанавливаем значение в блоке выбора дня
         			*/
         			
         			var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
@@ -922,7 +972,7 @@
         		  	date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[states.selected_date.format("M") - 1]).find("span").filter("[date='"+states.selected_date.format("D")+"']").addClass("hover").addClass("active").removeClass("hover");
                     
                     /*
-                        Р•СЃР»Рё РјРѕР¶РЅРѕ РІС‹Р±РёСЂР°С‚СЊ С‡Р°СЃ
+                        Если можно выбирать час
                     */
                     
                     if (options.hour_picker)
@@ -956,7 +1006,7 @@
                     };
                     
                     /*
-                        Р•СЃР»Рё РјРѕР¶РЅРѕ РІС‹Р±РёСЂР°С‚СЊ РјРёРЅСѓС‚Сѓ
+                        Если можно выбирать минуту
                     */
                     
                     if (options.minute_picker)
@@ -990,18 +1040,27 @@
                     };
                     
                     /*
-                        Р’РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёРµ РІ С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ (РЅР° СЃР»СѓС‡Р°Р№ РёРЅРІРѕСѓРєР°)
+                        Вписываем значение в текстовое поле (на случай инвоука)
                     */
                     
                     states.container.find(".goodyear-text").val(states.input_text_value);
                     
-                    states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                    //
+                    //  Вызываем действие change, если текст изменился
+                    //
+                    
+                    if (states.input_hidden_text_value != states.container.find(".goodyear-hidden-text").val())
+                    {                        
+                        states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
+                        
+                        states.container.find(".goodyear-hidden-text").triggerHandler("change");
+                    };
                     
                     states.container.removeClass("goodyear-error");
         			
                     /*
-                        РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚Р°РєСѓСЋ Р¶Рµ РґР°С‚Сѓ РІ СЃРІСЏР·Р°РЅРЅС‹С… input'ax
-                        (С‚РµСЃС‚РѕРІС‹Р№ С„СѓРЅРєС†РёРѕРЅР°Р»)
+                        Устанавливаем такую же дату в связанных input'ax
+                        (тестовый функционал)
                     */
                     
                     if (options.range_from_id)
@@ -1079,7 +1138,7 @@
         		},
         		
         		/*
-        			РџСЂРёРјРµРЅРµРЅРёРµ РІС‹Р±РѕСЂР° РіРѕРґР° РІ Р±Р»РѕРєРµ СЃР»РµРІР°
+        			Применение выбора года в блоке слева
         		*/
         		
         		year_change_date_block_reaction : function()
@@ -1207,7 +1266,7 @@
         		},
         		
         		/*
-        			РђРєС‚РёРІРёСЂСѓРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РѕС‚РєСЂС‹С‚СЊ Рё Р·Р°РєСЂС‹С‚СЊ РІС‹Р±РѕСЂ РґР°С‚С‹
+        			Активируем возможность открыть и закрыть выбор даты
         		*/
         		
         		show_and_hide_picker : function(){
@@ -1215,7 +1274,7 @@
         			states.container.find(".goodyear-text").focus(function(){
                                         
                                         //
-                                        //  Р’С‹РїРѕР»РЅСЏРµРј Р·Р°РґР°РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РёР·РІРЅРµ focus event
+                                        //  Выполняем заданный пользователем извне focus event
                                         //
                                         
                                         states.container.find(".goodyear-hidden-text").triggerHandler("focus");
@@ -1261,13 +1320,13 @@
         		},
         		
         		/*
-        			РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РґР°С‚Сѓ РїСЂРё СѓРІРѕРґРµ С„РѕРєСѓСЃР° (РёР»Рё РїСЂРё РЅР°Р¶Р°С‚РёРё enter)
+        			Устанавливаем дату при уводе фокуса (или при нажатии enter)
         		*/
         		
         		set_date_on_blur : function(){
         			
         			/*
-        				РћР±РµСЃРїРµС‡РёРІР°РµРј СЂРµР°РєС†РёСЋ РЅР° РЅР°Р¶Р°С‚РёРµ РєР»Р°РІРёС€Рё enter
+        				Обеспечиваем реакцию на нажатие клавиши enter
         			*/
         			
         			states.container.find(".goodyear-text").keydown(function(event){
@@ -1294,6 +1353,8 @@
         					states.container.find(".goodyear-picker").css("zIndex", 1);
         					
         					states.container.find(".goodyear-picker").fadeOut(100);
+                            
+                            states.container.find(".goodyear-hidden-text").triggerHandler("blur");
         					
         				};
         			  
@@ -1304,13 +1365,13 @@
         			});
         			
         			/*
-        				РџСЂРёРјРµРЅСЏРµРј РІРІРµРґРµРЅРЅСѓСЋ РґР°С‚Сѓ РїСЂРё СѓРІРѕРґРµ С„РѕРєСѓСЃР°
+        				Применяем введенную дату при уводе фокуса
         			*/
         			
         			states.container.find(".goodyear-text").change(function(){
         	
         				/*
-        					Р’С‹Р±СЂР°РЅРЅР°СЏ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РґР°С‚Р°
+        					Выбранная в данный момент дата
         				*/
         				
         				var selected_date = methods.string_to_date($(this).val());
@@ -1339,22 +1400,19 @@
         					states.input_text_value = states.selected_date.format(options.visible_format);
         					states.input_hidden_text_value = states.selected_date.format(options.format);
         					methods.set_date();
-        					states.container.find(".goodyear-text").val(states.input_text_value);
-        	    				states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                                                //
-                                                //  Р’С‹РїРѕР»РЅСЏРµРј Р·Р°РґР°РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РёР·РІРЅРµ change event
-                                                //
-                                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
+                			
         					states.container.removeClass("goodyear-error");
         					states.input_text_error = false;
         				};			
+                        
+                        states.container.find(".goodyear-hidden-text").triggerHandler("blur");
         							  
         			});			
         			
         		},
         
         		/*
-        			РџРѕРґСЃРІРµС‚РєР° РјРµСЃСЏС†Р° РїСЂРё РЅР°РІРµРґРµРЅРёРё
+        			Подсветка месяца при наведении
         		*/
         		
         		months_hover : function (container){
@@ -1372,7 +1430,7 @@
         		},
         
         		/*
-        			РџСЂРѕРєСЂСѓС‚РєР° РјРµСЃСЏС†Р° РїРµСЂРµС‚СЏРіРёРІР°РЅРёРµРј
+        			Прокрутка месяца перетягиванием
         		*/
         		
         		months_drag : function (){
@@ -1491,7 +1549,7 @@
         		},
         		
         		/*	
-        			РџСЂРѕРєСЂСѓС‚РєР° РїР°Р»СЊС†РµРј
+        			Прокрутка пальцем
         		*/
         		
         		/*
@@ -1540,7 +1598,7 @@
         		*/
         		
         		/*
-        			РџСЂРѕРєСЂСѓС‚РєР° РјРµСЃСЏС†РµРІ
+        			Прокрутка месяцев
         		*/
         		
         		months_mousewheel : function (){
@@ -1559,7 +1617,7 @@
         				states.container.find(".goodyear-date-picker,.goodyear-month-picker,.goodyear-date-picker-label").mousewheel(function(event){
                             
         					/*
-        						Р•СЃР»Рё windows, СѓРІРµР»РёС‡РёРІР°РµРј РґРµР»СЊС‚Р° С„Р°РєС‚РѕСЂ
+        						Если windows, увеличиваем дельта фактор
         					*/
         					
         					if (navigator.platform.indexOf("Win") != -1) {
@@ -1593,7 +1651,7 @@
         		},
         
         		/*
-        			РљР»РёРє РїРѕ РјРµСЃСЏС†Сѓ
+        			Клик по месяцу
         		*/
         		
         		months_click : function(){
@@ -1645,7 +1703,7 @@
         		},		
         
         		/*
-        	  		РќР°РІРµРґРµРЅРёРµ РЅР° РіРѕРґ
+        	  		Наведение на год
         	  	*/
         	  
         		year_mouseenter : function(container){
@@ -1665,7 +1723,7 @@
         		},
         
         		/*
-        			РљР»РёРє РїРѕ РіРѕРґСѓ
+        			Клик по году
         		*/
         		
         		year_click : function()
@@ -1683,7 +1741,7 @@
         					states.displayed_year = parseInt($(this).text(), 10);
         					
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_year_items_count_from_top = states.displayed_year - options.min_year;
@@ -1706,7 +1764,7 @@
         					});
         					
         					/*
-        						Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёР·РјРµРЅРµРЅРёСЏ РіРѕРґР° РјРµРЅСЏРµРј СЃРёС‚СѓР°С†РёСЋ РІ Р±Р»РѕРєРµ СЃ РґР°С‚Р°РјРё
+        						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
@@ -1731,7 +1789,7 @@
         		},
         
         		/*
-        			РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РіРѕРґР°
+        			Перетягивание года
         		*/
         		
         		year_drag : function (){
@@ -1785,6 +1843,7 @@
         					};
         				
         				});
+                                                
         			});
         			
         			states.container.add(document).mouseup(function(e){
@@ -1797,7 +1856,7 @@
         					states.displayed_year = options.min_year + Math.round(Math.abs((parseInt(year_picker.find(".goodyear-years-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
                             
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_year_items_count_from_top = states.displayed_year - options.min_year;
@@ -1820,7 +1879,7 @@
         					});
         					
         					/*
-        						Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёР·РјРµРЅРµРЅРёСЏ РіРѕРґР° РјРµРЅСЏРµРј СЃРёС‚СѓР°С†РёСЋ РІ Р±Р»РѕРєРµ СЃ РґР°С‚Р°РјРё
+        						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
@@ -1857,7 +1916,7 @@
         		},
         
         		/*
-        		РџСЂРѕРєСЂСѓС‚РєР° РіРѕРґР° РїР°Р»СЊС†Р°РјРё
+        		Прокрутка года пальцами
         		*/
         		/*
         		year_touch : function (){
@@ -1906,7 +1965,7 @@
         					states.displayed_year = options.min_year + Math.round(Math.abs((parseInt(year_picker.find(".goodyear-years-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
         				
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					/*
         					var single_year_items_count_from_top = states.displayed_year - options.min_year;
@@ -1929,7 +1988,7 @@
         					});
         					
         					/*
-        						Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёР·РјРµРЅРµРЅРёСЏ РіРѕРґР° РјРµРЅСЏРµРј СЃРёС‚СѓР°С†РёСЋ РІ Р±Р»РѕРєРµ СЃ РґР°С‚Р°РјРё
+        						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					/*
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
@@ -1953,7 +2012,7 @@
         		*/
         
         		/*
-        		 Р’С‹Р±РѕСЂ РіРѕРґР° РєРѕР»РµСЃРѕРј РјС‹С€Рё
+        		 Выбор года колесом мыши
         		*/
         		
         		year_mousewheel : function (){
@@ -1978,7 +2037,7 @@
         					event.preventDefault();	
         					
         					/*
-        						Р•СЃР»Рё windows, СѓРІРµР»РёС‡РёРІР°РµРј РґРµР»СЊС‚Р° С„Р°РєС‚РѕСЂ
+        						Если windows, увеличиваем дельта фактор
         					*/
         					
         					if (navigator.platform.indexOf("Win") != -1) {
@@ -2011,7 +2070,7 @@
         						states.displayed_year = options.min_year + Math.round(Math.abs((parseInt(year_picker.find(".goodyear-years-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
         					
         						/*
-        							РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        							Устанавливаем значение годов
         						*/
         		
         						var single_year_items_count_from_top = states.displayed_year - options.min_year;
@@ -2034,7 +2093,7 @@
         						});
         						
         						/*
-        							Р’ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёР·РјРµРЅРµРЅРёСЏ РіРѕРґР° РјРµРЅСЏРµРј СЃРёС‚СѓР°С†РёСЋ РІ Р±Р»РѕРєРµ СЃ РґР°С‚Р°РјРё
+        							В результате изменения года меняем ситуацию в блоке с датами
         						*/
         						
         						states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
@@ -2060,7 +2119,7 @@
         		},
                 
                 /*
-        	  		РќР°РІРµРґРµРЅРёРµ РЅР° С‡Р°СЃ
+        	  		Наведение на час
         	  	*/
         	  
         		hour_mouseenter : function(container){
@@ -2080,7 +2139,7 @@
         		},
         
         		/*
-        			РљР»РёРє РїРѕ С‡Р°СЃСѓ
+        			Клик по часу
         		*/
         		
         		hour_click : function()
@@ -2098,7 +2157,7 @@
         					states.selected_hour = parseInt($(this).text(), 10);
         					
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_hour_items_count_from_top = parseInt(states.selected_hour, 10);
@@ -2126,7 +2185,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2142,7 +2200,7 @@
         		},
                 
                 /*
-        			РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РіРѕРґР°
+        			Перетягивание года
         		*/
         		
         		hour_drag : function (){
@@ -2208,7 +2266,7 @@
         					states.selected_hour = Math.round(Math.abs((parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
                             
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_hour_items_count_from_top = states.selected_hour;
@@ -2237,7 +2295,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);	
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2266,7 +2323,7 @@
         		},
                 
                 /*
-        	       Р’С‹Р±РѕСЂ С‡Р°СЃР° РєРѕР»РµСЃРѕРј РјС‹С€Рё
+        	       Выбор часа колесом мыши
         		*/
         		
         		hour_mousewheel : function (){
@@ -2291,7 +2348,7 @@
         					event.preventDefault();	
         					
         					/*
-        						Р•СЃР»Рё windows, СѓРІРµР»РёС‡РёРІР°РµРј РґРµР»СЊС‚Р° С„Р°РєС‚РѕСЂ
+        						Если windows, увеличиваем дельта фактор
         					*/
         					
         					if (navigator.platform.indexOf("Win") != -1) {
@@ -2324,7 +2381,7 @@
         						states.selected_hour = Math.round(Math.abs((parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
         					
         						/*
-        							РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        							Устанавливаем значение годов
         						*/
         		
         						var single_hour_items_count_from_top = states.selected_hour;
@@ -2357,7 +2414,6 @@
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);
                                 states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2374,7 +2430,7 @@
         		},
                 
                 /*
-        	  		РќР°РІРµРґРµРЅРёРµ РЅР° РјРёРЅСѓС‚С‹
+        	  		Наведение на минуты
         	  	*/
         	  
         		minute_mouseenter : function(container){
@@ -2394,7 +2450,7 @@
         		},
                 
                 /*
-        			РљР»РёРє РїРѕ С‡Р°СЃСѓ
+        			Клик по часу
         		*/
         		
         		minute_click : function()
@@ -2412,7 +2468,7 @@
                             states.selected_minute = Math.round(parseInt($(this).text(), 10) / options.minutes_step) * options.minutes_step;
         					
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_minute_items_count_from_top = parseInt(states.selected_minute, 10) / options.minutes_step;
@@ -2441,7 +2497,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2457,7 +2512,7 @@
         		},
                 
                 /*
-        			РџРµСЂРµС‚СЏРіРёРІР°РЅРёРµ РјРёРЅСѓС‚С‹
+        			Перетягивание минуты
         		*/
         		
         		minute_drag : function (){
@@ -2523,7 +2578,7 @@
         					states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height)) * options.minutes_step;
                             
         					/*
-        						РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        						Устанавливаем значение годов
         					*/
         					
         					var single_minute_items_count_from_top = states.selected_minute / options.minutes_step;
@@ -2552,7 +2607,6 @@
                     
                             states.container.find(".goodyear-text").val(states.input_text_value);
                             states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-                            states.container.find(".goodyear-hidden-text").triggerHandler("change");
                             
                             if (!states.is_mobile)
             				{
@@ -2581,7 +2635,7 @@
         		},
                 
                 /*
-        	       Р’С‹Р±РѕСЂ С‡Р°СЃР° РєРѕР»РµСЃРѕРј РјС‹С€Рё
+        	       Выбор часа колесом мыши
         		*/
         		
         		minute_mousewheel : function (){
@@ -2606,7 +2660,7 @@
         					event.preventDefault();	
         					
         					/*
-        						Р•СЃР»Рё windows, СѓРІРµР»РёС‡РёРІР°РµРј РґРµР»СЊС‚Р° С„Р°РєС‚РѕСЂ
+        						Если windows, увеличиваем дельта фактор
         					*/
         					
         					if (navigator.platform.indexOf("Win") != -1) {
@@ -2639,7 +2693,7 @@
         						states.selected_minute = Math.round(Math.abs((parseInt(minute_picker.find(".goodyear-minutes-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height))*options.minutes_step;
         					
         						/*
-        							РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РіРѕРґРѕРІ
+        							Устанавливаем значение годов
         						*/
         		
         						var single_minute_items_count_from_top = states.selected_minute / options.minutes_step;
@@ -2671,8 +2725,7 @@
                                 states.input_hidden_text_value = states.selected_date.format(options.format);
                         
                                 states.container.find(".goodyear-text").val(states.input_text_value);	
-                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);	
-                                states.container.find(".goodyear-hidden-text").triggerHandler("change");
+                                states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
                                 
                                 if (!states.is_mobile)
                 				{
@@ -2689,7 +2742,7 @@
         		},
         		
         		/*
-        			РџРѕРґСЃРІРµС‚РєР° РґР°С‚С‹ РїСЂРё РЅР°РІРµРґРµРЅРёРё
+        			Подсветка даты при наведении
         		*/
         		
         		date_hover : function (){
@@ -2740,67 +2793,66 @@
         		},
         		
         		/*
-        			Р’С‹Р±РѕСЂ РґР°С‚С‹
+        			Выбор даты
         		*/
         		
         		date_pick : function(){
         		
-                var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
+                    var date_slider = states.container.find(".goodyear-date-picker").find(".goodyear-slider");
         			
-                date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function(){
+                    date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function(){
         				
-                    if (!$(this).hasClass("disabled"))
-                    {
-                        states.container.removeClass("goodyear-error");
-                    };
+                        if (!$(this).hasClass("disabled"))
+                        {
+                            states.container.removeClass("goodyear-error");
+                        };
         				
         			}).mouseleave(function(){
         				
-                    if (!$(this).hasClass("disabled"))
-                    {
-                  
-                        if (states.input_text_error)
+                        if (!$(this).hasClass("disabled"))
                         {
-                           states.container.addClass("goodyear-error");
+                      
+                            if (states.input_text_error)
+                            {
+                               states.container.addClass("goodyear-error");
+                            };
+                      
                         };
-                  
-                    };
         				
         			}).click(function(){
                    
-                    if (!$(this).hasClass("disabled"))
-                    {
-                   
-                        states.container.removeClass("goodyear-error");
-
-                        states.input_text_error = false;
-
-                        states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
-
-                        states.input_text_value = states.selected_date.format(options.visible_format);
-                        states.input_hidden_text_value = states.selected_date.format(options.format);
-
-                        states.container.find(".goodyear-text").val(states.input_text_value);
-                        states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
-
-                        methods.set_date();
-
-                        states.container.find(".goodyear-text").focus();
-
-                        if (!states.is_mobile)
+                        if (!$(this).hasClass("disabled"))
                         {
-                           setTimeout(function(){
-                              states.container.find(".goodyear-text")[0].select();
-                           }, 1);
+                       
+                            states.container.removeClass("goodyear-error");
+    
+                            states.input_text_error = false;
+    
+                            states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
+    
+                            states.input_text_value = states.selected_date.format(options.visible_format);
+                            states.input_hidden_text_value = states.selected_date.format(options.format);
+    
+                            methods.set_date();
+    
+                            states.container.find(".goodyear-text").focus();
+    
+                            if (!states.is_mobile)
+                            {
+                               setTimeout(function(){
+                                  states.container.find(".goodyear-text")[0].select();
+                               }, 1);
+                            };
+    
+                            states.container.find(".goodyear-picker").css("zIndex", 1);
+    
+                            states.container.find(".goodyear-picker").fadeOut(100);		
+    
+                            states.picker_open = false;	
+                            
+                            states.container.find(".goodyear-hidden-text").triggerHandler("blur");
+                            
                         };
-
-                        states.container.find(".goodyear-picker").css("zIndex", 1);
-
-                        states.container.find(".goodyear-picker").fadeOut(100);		
-
-                        states.picker_open = false;	
-                        
-                    };
                    
         			});  
         		
@@ -2873,15 +2925,23 @@
         	};
                 
     		/*
-    			Р¤РѕСЂРјР°С‚, РїРµСЂРµРґР°РЅРЅС‹Р№ РІ data
+    			Формат, переданный в data
     		*/
             
-            if (typeof(goodyear_input.data("goodyearRangeFrom")) != "undefined" && typeof(goodyear_input.data("goodyearRangeFrom")))
+        	if (typeof(goodyear_input.data("goodyearNoIcon")) != "undefined" && goodyear_input.data("goodyearNoIcon") == true)
+        	{
+        		options.no_icon = true;
+        	} else
+        	{
+        		options.no_icon = false;
+        	};
+        	
+            if (typeof(goodyear_input.data("goodyearRangeFrom")) != "undefined" && goodyear_input.data("goodyearRangeFrom"))
             {
                 options.range_from_id = parseInt(goodyear_input.data("goodyearRangeFrom"), 10);
             };
             
-            if (typeof(goodyear_input.data("goodyearRangeTo")) != "undefined" && typeof(goodyear_input.data("goodyearRangeTo")))
+            if (typeof(goodyear_input.data("goodyearRangeTo")) != "undefined" && goodyear_input.data("goodyearRangeTo"))
             {
                 options.range_to_id = parseInt(goodyear_input.data("goodyearRangeTo"), 10);
             };
@@ -2941,31 +3001,31 @@
             options.hour_picker = true;
             
     		/*
-    			РЇР·С‹Рє
+    			Язык
     		*/
     		
     		moment.lang("ru");
     				
     		/*
-    			Р’С‹Р±СЂР°РЅРЅР°СЏ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РґР°С‚Р°
+    			Выбранная в данный момент дата
     		*/
     		
     		var selected_date = methods.string_to_date(goodyear_input.val());
     		
     		/*
-    			РЎРµРіРѕРґРЅСЏ
+    			Сегодня
     		*/
     		
     		states.today = moment();
     		
     		/*
-    			Р”РёР°РїР°Р·РѕРЅ Р»РµС‚
+    			Диапазон лет
     		*/
     				
     		options.min_date = methods.string_to_date(options.min_date);
     		
     		/*
-    			Р•СЃР»Рё РјРёРЅРёРјР°Р»СЊРЅР°СЏ РґР°С‚Р° СѓРєР°Р·Р°РЅР°, РІС‹СЃС‚Р°РІР»СЏРµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РіРѕРґ
+    			Если минимальная дата указана, выставляем в соответствии минимальный год
     		*/
     		
     		if (options.min_date)
@@ -2977,7 +3037,7 @@
     		{
     			
     			/*
-    				Р•СЃР»Рё РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РіРѕРґ СѓРєР°Р·Р°РЅ, Р° РґР°С‚Р° РЅРµС‚, РІС‹СЃС‚Р°РІР»СЏРµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РґР°С‚Сѓ
+    				Если минимальный год указан, а дата нет, выставляем в соответствии минимальную дату
     			*/
     			
     			options.min_date = methods.string_to_date(options.min_year + "-01-01");
@@ -2985,7 +3045,7 @@
     		} else
     		{
     			/*
-    				Р•СЃР»Рё РЅРµ СѓРєР°Р·Р°РЅ РЅРё РіРѕРґ, РЅРё РґР°С‚Р°, РЅР°Р·РЅР°С‡Р°РµРј РјРёРЅ. РіРѕРґ РєР°Рє С‚РµРєСѓС‰РёР№ - 50
+    				Если не указан ни год, ни дата, назначаем мин. год как текущий - 50
     			*/
     			
     			if (selected_date)
@@ -2997,7 +3057,7 @@
     			};
     			
     			/*
-    				РњРёРЅ. РґР°С‚Сѓ Р±РµСЂРµРј РѕС‚ РЅР°С‡Р°Р»Р° РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ РіРѕРґР°
+    				Мин. дату берем от начала минимального года
     			*/
     			
     			options.min_date = methods.string_to_date(options.min_year + "-01-01");	
@@ -3008,7 +3068,7 @@
     		options.max_date = methods.string_to_date(options.max_date);
     		
     		/*
-    			Р•СЃР»Рё РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР°С‚Р° СѓРєР°Р·Р°РЅР°, РІС‹СЃС‚Р°РІР»СЏРµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РіРѕРґ
+    			Если максимальная дата указана, выставляем в соответствии минимальный год
     		*/
     		
     		if (options.max_date)
@@ -3022,7 +3082,7 @@
     		{
     			
     			/*
-    				Р•СЃР»Рё РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РіРѕРґ СѓРєР°Р·Р°РЅ, Р° РґР°С‚Р° РЅРµС‚, РІС‹СЃС‚Р°РІР»СЏРµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР°С‚Сѓ
+    				Если максимальный год указан, а дата нет, выставляем в соответствии максимальную дату
     			*/
     			
     			options.max_date = methods.string_to_date(options.max_year + "-01-01");
@@ -3032,7 +3092,7 @@
     		} else
     		{
     			/*
-    				Р•СЃР»Рё РЅРµ СѓРєР°Р·Р°РЅ РЅРё РіРѕРґ, РЅРё РґР°С‚Р°, РЅР°Р·РЅР°С‡Р°РµРј РјР°РєСЃ. РіРѕРґ РєР°Рє С‚РµРєСѓС‰РёР№ + 50
+    				Если не указан ни год, ни дата, назначаем макс. год как текущий + 50
     			*/
     			
     			if (selected_date)
@@ -3044,14 +3104,14 @@
     			};
     			
     			/*
-    				РњР°РєСЃ. РґР°С‚Сѓ Р±РµСЂРµРј РѕС‚ РєРѕРЅС†Р° РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РіРѕРґР°
+    				Макс. дату берем от конца максимального года
     			*/
     			
     			options.max_date = methods.string_to_date(options.max_year + "-01-01").endOf("year");	
     		};
     		
     		/*
-    			Р•СЃР»Рё СЂР°СЃРїР°СЂСЃРёР»РѕСЃСЊ Рё РїРѕРїР°РґР°РµС‚ РІ РґРёР°РїР°Р·РѕРЅ
+    			Если распарсилось и попадает в диапазон
     		*/
             
     		if (selected_date && (selected_date >= options.min_date && selected_date <= options.max_date))
@@ -3077,7 +3137,7 @@
     		{
     			
                     /*
-                            Р•СЃР»Рё СЃРµРіРѕРґРЅСЏ РїРѕРїР°РґР°РµС‚ РІ СЂР°Р·СЂРµС€РµРЅРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ
+                            Если сегодня попадает в разрешенный диапазон
                     */
 
                     states.selected_date = states.today;
@@ -3087,7 +3147,7 @@
     		} else
     		{
                     /*
-                            Р•СЃР»Рё РЅРµС‚, РІС‹Р±СЂР°РЅРѕР№ РґР°С‚РѕР№ Р±СѓРґРµС‚ СЃС‡РёС‚Р°С‚СЊСЃСЏ РґР°С‚Р° РЅР°С‡Р°Р»Р° СЂР°Р·СЂРµС€РµРЅРЅРѕРіРѕ РґРёР°РїР°Р·РѕРЅР°
+                            Если нет, выбраной датой будет считаться дата начала разрешенного диапазона
                     */
 
                     states.selected_date = options.min_date;
@@ -3097,7 +3157,7 @@
     		};
             
             /*
-                РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјСЏ
+                Устанавливаем время
             */        
     		if (selected_date)
     		{
@@ -3110,7 +3170,7 @@
     		}
     
     		/*
-    			РџСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ РїР»Р°РіРёРЅР° mousewheel
+    			Проверяем наличие плагина mousewheel
     		*/
     		
     		if (jQuery().mousewheel)
@@ -3119,7 +3179,7 @@
     		};
     		
     		/*
-    			Р РµР°РєС†РёРё РІСЃРµРіРѕ РґРѕРєСѓРјРµРЅС‚Р° РЅР° РЅРµРєРѕС‚РѕСЂС‹Рµ РґРµР№СЃС‚РІРёСЏ: РѕС‚РїСѓСЃРєР°РЅРёРµ РјС‹С€Рё, РєР»РёРє РІ СЃС‚РѕСЂРѕРЅРµ
+    			Реакции всего документа на некоторые действия: отпускание мыши, клик в стороне
     		*/
     
     		goodyear_input = methods.wrap_element(goodyear_input);
@@ -3142,7 +3202,7 @@
       
     };
  
-    return init(this, options);
+    return init(this, options, methods_params);
         
   };
 })(jQuery);
