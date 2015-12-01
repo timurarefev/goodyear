@@ -1309,6 +1309,7 @@
         				{
         					setTimeout(function(){
         						states.container.find(".goodyear-text")[0].select();
+                                states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         					}, 1);
         				};
         				
@@ -1347,6 +1348,7 @@
         					{
         						setTimeout(function(){
         							states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         						}, 1);
         					};
         				
@@ -1807,6 +1809,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -1944,6 +1947,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2180,6 +2184,7 @@
         	    				{
         	    					setTimeout(function(){
         	    						states.container.find(".goodyear-text")[0].select();
+                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         	    					}, 1);	
         	    				};
         						
@@ -2262,6 +2267,8 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
+                                    
             					}, 1);	
             				};
         					
@@ -2372,6 +2379,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2491,6 +2499,7 @@
                 				{
                 					setTimeout(function(){
                 						states.container.find(".goodyear-text")[0].select();
+                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                 					}, 1);	
                 				};
                                 
@@ -2574,6 +2583,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2684,6 +2694,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2803,6 +2814,7 @@
                 				{
                 					setTimeout(function(){
                 						states.container.find(".goodyear-text")[0].select();
+                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                 					}, 1);	
                 				};
                                 
@@ -2834,6 +2846,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);		
             				};
                         
@@ -2855,6 +2868,7 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
+                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         				
@@ -2913,6 +2927,7 @@
                             {
                                setTimeout(function(){
                                   states.container.find(".goodyear-text")[0].select();
+                                  states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                                }, 1);
                             };
     
