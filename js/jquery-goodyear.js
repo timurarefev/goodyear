@@ -539,35 +539,18 @@
         			{			
         				case "border-box" :
                                                 
-                            //
-                            //  Ширина может быть явно не задана в css
-                            //
-                            
-                            var css_width = $(element).css("width");
-    
-                            if (
-                                typeof(css_width) == "undefined" ||
-                                (
-                                    parseInt(css_width, 10) == 0 &&
-                                    css_width.substr(css_width.length - 2) == "px"
-                                )
-                            )
-                            {                                
-                               // 
-                               // В таком случае берем просто вычисленную ширину элемента 
-                               //
-                               
-                               container_template.css("width", $(element).width());  
-                            } else
-                            {
-                                
-                               var css_width_full =  
-                               parseFloat($(element).css("width")) + 
-                               parseFloat($(element).css("padding-left")) +  
-                               parseFloat($(element).css("padding-right"));
-                                
-                               container_template.css("width", css_width_full);                                
-                            };
+                            container_template.css("width", 
+        							parseFloat($(element).width())
+        							+ parseFloat($(element).css("padding-left"))
+        							+ parseFloat($(element).css("padding-right"))
+        							+ parseFloat($(element).css("border-left-width"))
+        							+ parseFloat($(element).css("border-right-width")));
+        					
+        					$(element).css("height", parseFloat($(element).height())
+        							+ parseFloat($(element).css("padding-top"))
+        							+ parseFloat($(element).css("padding-bottom"))
+        							+ parseFloat($(element).css("border-top-width"))
+        							+ parseFloat($(element).css("border-bottom-width")));
 
         				break;
         				
@@ -1309,7 +1292,6 @@
         				{
         					setTimeout(function(){
         						states.container.find(".goodyear-text")[0].select();
-                                states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         					}, 1);
         				};
         				
@@ -1348,7 +1330,6 @@
         					{
         						setTimeout(function(){
         							states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         						}, 1);
         					};
         				
@@ -1809,7 +1790,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -1947,7 +1927,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2184,7 +2163,6 @@
         	    				{
         	    					setTimeout(function(){
         	    						states.container.find(".goodyear-text")[0].select();
-                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
         	    					}, 1);	
         	    				};
         						
@@ -2267,8 +2245,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
-                                    
             					}, 1);	
             				};
         					
@@ -2379,7 +2355,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2499,7 +2474,6 @@
                 				{
                 					setTimeout(function(){
                 						states.container.find(".goodyear-text")[0].select();
-                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                 					}, 1);	
                 				};
                                 
@@ -2583,7 +2557,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2694,7 +2667,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         					
@@ -2814,7 +2786,6 @@
                 				{
                 					setTimeout(function(){
                 						states.container.find(".goodyear-text")[0].select();
-                                        states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                 					}, 1);	
                 				};
                                 
@@ -2846,7 +2817,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);		
             				};
                         
@@ -2868,7 +2838,6 @@
             				{
             					setTimeout(function(){
             						states.container.find(".goodyear-text")[0].select();
-                                    states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
             					}, 1);	
             				};
         				
@@ -2927,7 +2896,6 @@
                             {
                                setTimeout(function(){
                                   states.container.find(".goodyear-text")[0].select();
-                                  states.container.find(".goodyear-text")[0].setSelectionRange(0, 9999);
                                }, 1);
                             };
     
