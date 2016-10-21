@@ -1,5 +1,5 @@
-﻿/*
- * Goodyear 1.3
+/*
+ * Goodyear
  * Timur Arefev (http://timurarefev.ru), Ilya Birman (http://ilyabirman.ru)
  * 2014
  */
@@ -539,29 +539,18 @@
         			{			
         				case "border-box" :
                                                 
-                                                //
-                                                //  Ширина может быть явно не задана в css
-                                                //
-                                                
-                                                var css_width = $(element).css("width");
-                        
-                                                if (
-                                                    typeof(css_width) == "undefined" ||
-                                                    (
-                                                        parseInt(css_width, 10) == 0 &&
-                                                        css_width.substr(css_width.length - 2) == "px"
-                                                    )
-                                                )
-                                                {                                
-                                                   // 
-                                                   // В таком случае берем просто вычисленную ширину элемента 
-                                                   //
-                                                   
-                                                   container_template.css("width", $(element).width());  
-                                                } else
-                                                {
-                                                   container_template.css("width", css_width);                                
-                                                };
+                            container_template.css("width", 
+        							parseFloat($(element).width())
+        							+ parseFloat($(element).css("padding-left"))
+        							+ parseFloat($(element).css("padding-right"))
+        							+ parseFloat($(element).css("border-left-width"))
+        							+ parseFloat($(element).css("border-right-width")));
+        					
+        					$(element).css("height", parseFloat($(element).height())
+        							+ parseFloat($(element).css("padding-top"))
+        							+ parseFloat($(element).css("padding-bottom"))
+        							+ parseFloat($(element).css("border-top-width"))
+        							+ parseFloat($(element).css("border-bottom-width")));
 
         				break;
         				
@@ -1767,13 +1756,35 @@
         						В результате изменения года меняем ситуацию в блоке с датами
         					*/
         					
-        					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
-        					
-                			states.input_text_value = states.selected_date.format(options.visible_format);
-                			
-                			methods.set_date();
-        					
-        					methods.year_change_date_block_reaction();
+        					var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+                            
+                            states.input_text_value = selected_date.format(options.visible_format);
+                            
+                            if (
+                                !selected_date || 
+                                (
+                                    selected_date && 
+                                    (
+                                        selected_date.year() < options.min_year || 
+                                        selected_date.year() > options.max_year || 
+                                        selected_date < options.min_date ||
+                                        selected_date > options.max_date
+                                    )
+                                )
+                            )
+            				{
+            					states.container.addClass("goodyear-error");
+            					
+            					states.input_text_error = true;	
+                                				
+            				} else
+            				{
+            				    states.selected_date = selected_date;
+                                
+                                methods.set_date();                               
+        				    }
+                            
+                            methods.year_change_date_block_reaction();
         					
         					if (!states.is_mobile)
             				{
@@ -1881,14 +1892,36 @@
         					/*
         						В результате изменения года меняем ситуацию в блоке с датами
         					*/
-        					
-        					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
-        					
-                			states.input_text_value = states.selected_date.format(options.visible_format);
-                			
-                			methods.set_date();
-        					
-        					methods.year_change_date_block_reaction();	
+                            
+                            var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+                            
+                            states.input_text_value = selected_date.format(options.visible_format);
+                            
+                            if (
+                                !selected_date || 
+                                (
+                                    selected_date && 
+                                    (
+                                        selected_date.year() < options.min_year || 
+                                        selected_date.year() > options.max_year || 
+                                        selected_date < options.min_date ||
+                                        selected_date > options.max_date
+                                    )
+                                )
+                            )
+            				{
+            					states.container.addClass("goodyear-error");
+            					
+            					states.input_text_error = true;	
+                                				
+            				} else
+            				{
+            				    states.selected_date = selected_date;
+                                
+                                methods.set_date();                               
+        				    }
+                            
+                            methods.year_change_date_block_reaction();
         					
         					if (!states.is_mobile)
             				{
@@ -2095,14 +2128,36 @@
         						/*
         							В результате изменения года меняем ситуацию в блоке с датами
         						*/
-        						
-        						states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
-        						        						        						
-        	        			states.input_text_value = states.selected_date.format(options.visible_format);
-        	        			
-        	        			methods.set_date();
-        						
-        						methods.year_change_date_block_reaction();	
+                                
+                                var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+                            
+                                states.input_text_value = selected_date.format(options.visible_format);
+                                
+                                if (
+                                    !selected_date || 
+                                    (
+                                        selected_date && 
+                                        (
+                                            selected_date.year() < options.min_year || 
+                                            selected_date.year() > options.max_year || 
+                                            selected_date < options.min_date ||
+                                            selected_date > options.max_date
+                                        )
+                                    )
+                                )
+                				{
+                					states.container.addClass("goodyear-error");
+                					
+                					states.input_text_error = true;	
+                                    				
+                				} else
+                				{
+                				    states.selected_date = selected_date;
+                                    
+                                    methods.set_date();                               
+            				    }
+                                
+                                methods.year_change_date_block_reaction();        	        			
         						
         						if (!states.is_mobile)
         	    				{

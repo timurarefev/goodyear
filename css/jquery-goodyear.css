@@ -288,6 +288,10 @@
 	color:#000;
 }
 
+.goodyear-container .goodyear-picker .goodyear-date-picker .goodyear-month .goodyear-slide_line span.active.disabled{
+    background-color:#fcbdbd;
+}
+
 .goodyear-container .goodyear-picker .goodyear-month-picker,
 .goodyear-container .goodyear-picker .goodyear-year-picker,
 .goodyear-container .goodyear-picker .goodyear-hour-picker,
