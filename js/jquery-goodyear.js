@@ -144,15 +144,19 @@
         
         } else
         {
-        
-            var options = $.extend({
+        	
+        	var options = $.extend({
+        		
+        		language : "ru"
+        		
+            }, options);
+        	
+        	options = $.extend({
     		
         		format : "YYYY-MM-DD",
         		
-        		visible_format : "D MMMM YYYY г.",
+        		minutes_step : 5
         		
-        		minutes_step : 5			
-    		
             }, options);
         	  	
         	var block_model = {
@@ -218,13 +222,13 @@
         				</div>\
         				<div class='goodyear-date-picker-label'>\
         					<div class='goodyear-date-picker-label-background'></div>\
-        					<span class='goodyear-monday'>" + presets.days_of_week[0] + "</span>\
-        					<span class='goodyear-tuesday'>" + presets.days_of_week[1] + "</span>\
-        					<span class='goodyear-wednesday'>" + presets.days_of_week[2] + "</span>\
-        					<span class='goodyear-thursday'>" + presets.days_of_week[3] + "</span>\
-        					<span class='goodyear-friday'>" + presets.days_of_week[4] + "</span>\
-        					<span class='goodyear-saturday'>" + presets.days_of_week[5] + "</span>\
-        					<span class='goodyear-sunday'>" + presets.days_of_week[6] + "</span>\
+        					<span class='goodyear-monday'>" + presets["days_of_week_" + options.language][0] + "</span>\
+        					<span class='goodyear-tuesday'>" + presets["days_of_week_" + options.language][1] + "</span>\
+        					<span class='goodyear-wednesday'>" + presets["days_of_week_" + options.language][2] + "</span>\
+        					<span class='goodyear-thursday'>" + presets["days_of_week_" + options.language][3] + "</span>\
+        					<span class='goodyear-friday'>" + presets["days_of_week_" + options.language][4] + "</span>\
+        					<span class='goodyear-saturday'>" + presets["days_of_week_" + options.language][5] + "</span>\
+        					<span class='goodyear-sunday'>" + presets["days_of_week_" + options.language][6] + "</span>\
         				</div>\
         				<div class='goodyear-year-picker'>\
         					<div class='goodyear-years'>\
@@ -317,7 +321,7 @@
         			for (month_num = 0; month_num < 12; month_num++)
         			{	
         						  
-        			  text += "<div class='goodyear-month goodyear-"+presets.months_en[month_num] + (states.today.format("M") == (month_num + 1) ? " today" : "") + "'>"+presets.months_ru_short[month_num] + (states.today.format("M") == (month_num + 1) ? "<span class='bull'> &bull;</span>" : "") + "</div>";
+        			  text += "<div class='goodyear-month goodyear-"+presets.months_en[month_num] + (states.today.format("M") == (month_num + 1) ? " today" : "") + "'>"+presets["months_" + options.language + "_short"][month_num] + (states.today.format("M") == (month_num + 1) ? "<span class='bull'> &bull;</span>" : "") + "</div>";
         			  
         			};
         			
@@ -333,10 +337,12 @@
         			{	
         				
         				var month_first_date = moment(states.selected_date.format("YYYY") + "-" + (month_num + 1) + "-01", "YYYY-M-DD");
+        				
+        				month_first_date.locale(options.language);
         			
         				var day_of_week = month_first_date.format("e");
         				
-        				var days_count = month_first_date.add("months", 1).subtract("days", 1).format("D");
+        				var days_count = month_first_date.add(1, "months").subtract(1, "days").format("D");
         				
         				var shifted = (day_of_week > 2 ? 9 : 2) - day_of_week;
         
@@ -351,7 +357,7 @@
         			  
         				text += "\
         				<div class='goodyear-month goodyear-"+presets.months_en[month_num]+"' data-month-id='"+month_num+"'>\
-        					<div class='goodyear-label'>" + presets.months_ru[month_num].substr(0, 1).toUpperCase() + presets.months_ru[month_num].substr(1) + "</div>\
+        					<div class='goodyear-label'>" + presets["months_" + options.language][month_num].substr(0, 1).toUpperCase() + presets["months_" + options.language][month_num].substr(1) + "</div>\
         					<div class='goodyear-line_1'>\
         						<div class='goodyear-weekdays'>\
         							<div class='goodyear-slide_line' style='left:"+line_1_weekdays_shift+"px;'>\
@@ -503,11 +509,13 @@
         	};
         	
         	var presets = {
-        		months_en : ["january", "febrary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+        		months_en : ["January", "Febrary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         		months_ru : ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"],
         		months_ru_short : ["янв", "фев", "мар", "апр", "май", "июнь", "июль", "авг", "сен", "окт", "ноя", "дек"],
+        		months_en_short : ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
         		months_ru_genitive : ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
-        		days_of_week : ["П", "В", "С", "Ч", "П", "С", "В"],
+        		days_of_week_ru : ["П", "В", "С", "Ч", "П", "С", "В"],
+        		days_of_week_en : ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
         		common_date_formats : [["D M", "DD M", "DD MM", "D-M", "DD-M", "DD-MM","D.M", "DD.M", "DD.MM","D\\M", "DD\\M", "DD\\MM","D/M", "DD/M", "DD/MM", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "D M YY", "DD M YY", "DD MM YY","D M YYYY", "DD M YYYY", "DD MM YYYY", "D-M-YY", "DD-M-YY", "DD-MM-YY","D-M-YYYY", "DD-M-YYYY", "DD-MM-YYYY", "D.M.YY", "DD.M.YY", "DD.MM.YY","D.M.YYYY", "DD.M.YYYY", "DD.MM.YYYY", "D\\M\\YY", "DD\\M\\YY", "DD\\MM\\YY","D\\M\\YYYY", "DD\\M\\YYYY", "DD\\MM\\YYYY", "D/M/YY", "DD/M/YY", "DD/MM/YY","D/M/YYYY", "DD/M/YYYY", "DD/MM/YYYY", "YY M D", "YY M DD", "YY MM DD","YYYY M D", "YYYY M DD", "YYYY MM DD", "YY-M-D", "YY-M-DD", "YY-MM-DD","YYYY-M-D", "YYYY-M-DD", "YYYY-MM-DD", "YY.M.D", "YY.M.DD", "YY.MM.DD","YYYY.M.D", "YYYY.M.DD", "YYYY.MM.DD", "YY\\M\\D", "YY\\M\\DD", "YY\\MM\\DD","YYYY\\M\\D", "YYYY\\M\\DD", "YYYY\\MM\\DD", "YY/M/D", "YY/M/DD", "YY/MM/DD","YYYY/M/D", "YYYY/M/DD", "YYYY/MM/DD", "YY D M", "YY DD M", "YY DD MM","YYYY D M", "YYYY DD MM", "YYYY DD MM", "YY-D-M", "YY-DD-M", "YY-DD-MM","YYYY-D-M", "YYYY-DD-MM", "YYYY-DD-MM", "YY.D.M", "YY.DD.M", "YY.DD.MM","YYYY.D.M", "YYYY.DD.MM", "YYYY.DD.MM", "YY\\D\\M", "YY\\DD\\M", "YY\\DD\\MM","YYYY\\D\\M", "YYYY\\DD\\MM", "YYYY\\DD\\MM", "YY/D/M", "YY/DD/M", "YY/DD/MM","YYYY/D/M", "YYYY/DD/MM", "YYYY/DD/MM", "D MMM", "DD MMM", "D M HH:mm", "DD M HH:mm", "DD MM HH:mm", "D-M HH:mm", "DD-M HH:mm", "DD-MM HH:mm","D.M HH:mm", "DD.M HH:mm", "DD.MM HH:mm","D\\M HH:mm", "DD\\M HH:mm", "DD\\MM HH:mm","D/M HH:mm", "DD/M HH:mm", "DD/MM HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "D M YY HH:mm", "DD M YY HH:mm", "DD MM YY HH:mm","D M YYYY HH:mm", "DD M YYYY HH:mm", "DD MM YYYY HH:mm", "D-M-YY HH:mm", "DD-M-YY HH:mm", "DD-MM-YY HH:mm","D-M-YYYY HH:mm", "DD-M-YYYY HH:mm", "DD-MM-YYYY HH:mm", "D.M.YY HH:mm", "DD.M.YY HH:mm", "DD.MM.YY HH:mm","D.M.YYYY HH:mm", "DD.M.YYYY HH:mm", "DD.MM.YYYY HH:mm", "D\\M\\YY HH:mm", "DD\\M\\YY HH:mm", "DD\\MM\\YY HH:mm","D\\M\\YYYY HH:mm", "DD\\M\\YYYY HH:mm", "DD\\MM\\YYYY HH:mm", "D/M/YY HH:mm", "DD/M/YY HH:mm", "DD/MM/YY HH:mm","D/M/YYYY HH:mm", "DD/M/YYYY HH:mm", "DD/MM/YYYY HH:mm", "YY M D HH:mm", "YY M DD HH:mm", "YY MM DD HH:mm","YYYY M D HH:mm", "YYYY M DD HH:mm", "YYYY MM DD HH:mm", "YY-M-D HH:mm", "YY-M-DD HH:mm", "YY-MM-DD HH:mm","YYYY-M-D HH:mm", "YYYY-M-DD HH:mm", "YYYY-MM-DD HH:mm", "YY.M.D HH:mm", "YY.M.DD HH:mm", "YY.MM.DD HH:mm","YYYY.M.D HH:mm", "YYYY.M.DD HH:mm", "YYYY.MM.DD HH:mm", "YY\\M\\D HH:mm", "YY\\M\\DD HH:mm", "YY\\MM\\DD HH:mm","YYYY\\M\\D HH:mm", "YYYY\\M\\DD HH:mm", "YYYY\\MM\\DD HH:mm", "YY/M/D HH:mm", "YY/M/DD HH:mm", "YY/MM/DD HH:mm","YYYY/M/D HH:mm", "YYYY/M/DD HH:mm", "YYYY/MM/DD HH:mm", "YY D M HH:mm", "YY DD M HH:mm", "YY DD MM HH:mm","YYYY D M HH:mm", "YYYY DD MM HH:mm", "YYYY DD MM HH:mm", "YY-D-M HH:mm", "YY-DD-M HH:mm", "YY-DD-MM HH:mm","YYYY-D-M HH:mm", "YYYY-DD-MM HH:mm", "YYYY-DD-MM HH:mm", "YY.D.M HH:mm", "YY.DD.M HH:mm", "YY.DD.MM HH:mm","YYYY.D.M HH:mm", "YYYY.DD.MM HH:mm", "YYYY.DD.MM HH:mm", "YY\\D\\M HH:mm", "YY\\DD\\M HH:mm", "YY\\DD\\MM HH:mm","YYYY\\D\\M HH:mm", "YYYY\\DD\\MM HH:mm", "YYYY\\DD\\MM HH:mm", "YY/D/M HH:mm", "YY/DD/M HH:mm", "YY/DD/MM HH:mm","YYYY/D/M HH:mm", "YYYY/DD/MM HH:mm", "YYYY/DD/MM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY", "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "D MMM", "DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm", "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm", "D MMM HH:mm", "DD MMM HH:mm"],[ "YYYY MMM D", "YYYY MMM DD", "YYYY D MMM", "YYYY DD MMM", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "D MMM YY", "DD MMM YY", "D MMM YYYY", "DD MMM YYYY", "MMM D YYYY", "MMM DD YYYY",   "YY MMM D", "YY MMM DD", "YY D MMM", "YY DD MMM", "YYYY MMM D HH:mm", "YYYY MMM DD HH:mm", "YYYY D MMM HH:mm", "YYYY DD MMM HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "D MMM YY HH:mm", "DD MMM YY HH:mm", "D MMM YYYY HH:mm", "DD MMM YYYY HH:mm", "MMM D YYYY HH:mm", "MMM DD YYYY HH:mm",   "YY MMM D HH:mm", "YY MMM DD HH:mm", "YY D MMM HH:mm", "YY DD MMM HH:mm"]],
         		common_date_langs : ["ru", "en"]
         	};
@@ -1161,10 +1169,12 @@
         				var month_num = states.container.find(".goodyear-date-picker").find(".goodyear-month").index($(this));
         				  
         				var month_first_date = moment(states.displayed_year + "-" + (month_num + 1) + "-01", "YYYY-M-DD");
+        				
+        				month_first_date.locale(options.language);
         			
         				var day_of_week = month_first_date.format("e");	
         				
-        				var days_count = month_first_date.add("months", 1).subtract("days", 1).format("D");
+        				var days_count = month_first_date.add(1, "months").subtract(1, "days").format("D");
         				
         				var shifted = (day_of_week > 2 ? 9 : 2) - day_of_week;
         
@@ -1209,6 +1219,8 @@
                         {
                             
                             var current_date = moment([states.displayed_year, month_num, day]);
+                            
+                            current_date.locale(options.language);
                             
                             if (
                                 (!options.min_date || current_date >= options.min_date) &&
@@ -1757,6 +1769,8 @@
         					*/
         					
         					var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
+        					
+        					current_date.locale(options.language);
                             
                             states.input_text_value = selected_date.format(options.visible_format);
                             
@@ -1895,6 +1909,8 @@
                             
                             var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
                             
+                            selected_date.locale(options.language);
+                            
                             states.input_text_value = selected_date.format(options.visible_format);
                             
                             if (
@@ -2026,6 +2042,8 @@
         					/*
         					states.selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
 		        			
+		        			states.selected_date.locale(options.language);
+		        			
 		        			states.input_text_value = states.selected_date.format(options.visible_format);        			
 		        			
 		        			methods.set_date();
@@ -2130,7 +2148,9 @@
         						*/
                                 
                                 var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
-                            
+                                
+                                selected_date.locale(options.language);
+                                
                                 states.input_text_value = selected_date.format(options.visible_format);
                                 
                                 if (
@@ -2811,7 +2831,11 @@
                          
             				$(this).addClass("hover");
             
-            				states.container.find(".goodyear-text").val(moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]).format(options.visible_format));
+            				var goodyear_text = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
+            				
+            				goodyear_text.locale(options.language);
+            				
+            				states.container.find(".goodyear-text").val(goodyear_text.format(options.visible_format));
             
             				if (!states.is_mobile)
             				{
@@ -2884,7 +2908,9 @@
                             states.input_text_error = false;
     
                             states.selected_date = moment([states.displayed_year, parseInt($(this).parents(".goodyear-month").data("monthId"), 10), parseInt($(this).text(), 10), states.selected_hour, states.selected_minute]);
-    
+                            
+                            states.selected_date.locale(options.language);
+                            
                             states.input_text_value = states.selected_date.format(options.visible_format);
                             states.input_hidden_text_value = states.selected_date.format(options.format);
     
@@ -2928,6 +2954,8 @@
         			{
                         var parsed_date = moment(methods.trim(string), options.format, presets.common_date_langs[i], true);
                         
+                        parsed_date.locale(options.language);
+                        
                         if (parsed_date.isValid())
             			{
         	                break;
@@ -2937,6 +2965,8 @@
                     for (i = 0; i < presets.common_date_langs.length; i++)
         			{
                         var parsed_date = moment(methods.trim(string), options.visible_format, presets.common_date_langs[i], true);
+                        
+                        parsed_date.locale(options.language);
                         
                         if (parsed_date.isValid())
             			{
@@ -2952,6 +2982,8 @@
             				for (i = 0; i < presets.common_date_langs.length; i++)
             				{
             					var parsed_date = moment(methods.trim(string), presets.common_date_formats[k], presets.common_date_langs[i], (k < 2));
+            					
+            					parsed_date.locale(options.language);
             					
             					if (parsed_date.isValid())
             					{
@@ -2982,7 +3014,18 @@
     		/*
     			Формат, переданный в data
     		*/
-            
+                    	
+        	if (typeof(goodyear_input.data("goodyearLanguage")) != "undefined" && goodyear_input.data("goodyearLanguage") == "ru" || goodyear_input.data("goodyearLanguage") == "en")
+        	{
+        		options.language = goodyear_input.data("goodyearLanguage");
+        	};
+        	
+        	options = $.extend({
+        		
+        		visible_format : (options.language == "ru" ? "D MMMM YYYY г.": "D MMMM YYYY")
+        		
+            }, options);
+        	
         	if (typeof(goodyear_input.data("goodyearNoIcon")) != "undefined" && goodyear_input.data("goodyearNoIcon") == true)
         	{
         		options.no_icon = true;
@@ -3054,13 +3097,7 @@
             
             if (options.minute_picker)
             options.hour_picker = true;
-            
-    		/*
-    			Язык
-    		*/
-    		
-    		moment.lang("ru");
-    				
+                		    				
     		/*
     			Выбранная в данный момент дата
     		*/
@@ -3072,6 +3109,8 @@
     		*/
     		
     		states.today = moment();
+    		
+    		states.today.locale(options.language);
     		
     		/*
     			Диапазон лет
