@@ -3325,7 +3325,7 @@ $(document).ready(function(){
 	if (script_path)
 	if (typeof(moment) == "undefined")
 	{		
-		$("<script src='"+script_path + "moment-with-langs.min.js'></script>").insertAfter(script_block);	
+		$("<script src='"+script_path + "moment-with-langs-2.17.1.min.js'></script>").insertAfter(script_block);	
 	}; 
     
 	if (script_path)
