@@ -548,13 +548,13 @@
         				case "border-box" :
                                                 
                             container_template.css("width", 
-        							parseFloat($(element).width())
+        							parseFloat($(element).actual("width"))
         							+ parseFloat($(element).css("padding-left"))
         							+ parseFloat($(element).css("padding-right"))
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
         					
-        					$(element).css("height", parseFloat($(element).height())
+        					$(element).css("height", parseFloat($(element).actual("height"))
         							+ parseFloat($(element).css("padding-top"))
         							+ parseFloat($(element).css("padding-bottom"))
         							+ parseFloat($(element).css("border-top-width"))
@@ -564,13 +564,13 @@
         				
         				case "content-box" :
         					container_template.css("width", 
-        							parseFloat($(element).width())
+        							parseFloat($(element).actual("width"))
         							+ parseFloat($(element).css("padding-left"))
         							+ parseFloat($(element).css("padding-right"))
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
         					
-        					$(element).css("height", parseFloat($(element).height())
+        					$(element).css("height", parseFloat($(element).actual("height"))
         							+ parseFloat($(element).css("padding-top"))
         							+ parseFloat($(element).css("padding-bottom"))
         							+ parseFloat($(element).css("border-top-width"))
@@ -579,11 +579,11 @@
         				
         				case "padding-box" :
         					container_template.css("width", 
-        							parseFloat($(element).width())
+        							parseFloat($(element).actual("width"))
         							+ parseFloat($(element).css("border-left-width"))
         							+ parseFloat($(element).css("border-right-width")));
         					
-        					$(element).css("height", parseFloat($(element).height())
+        					$(element).css("height", parseFloat($(element).actual("height"))
         							+ parseFloat($(element).css("border-top-width"))
         							+ parseFloat($(element).css("border-bottom-width")));
         				break;			
@@ -3332,6 +3332,12 @@ $(document).ready(function(){
 	if (!jQuery().mousewheel)
 	{	
 		$("<script src='"+script_path + "jquery-mousewheel-3.1.11.min.js'></script>").insertAfter(script_block);	
+	};
+	
+	if (script_path)
+	if (!jQuery().actual)
+	{	
+		$("<script src='"+script_path + "jquery.actual.min.js'></script>").insertAfter(script_block);	
 	};
 		
 	$(".goodyear").goodyear();
