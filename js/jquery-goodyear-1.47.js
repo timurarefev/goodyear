@@ -340,7 +340,7 @@
         				
         				month_first_date.locale(options.language);
         			
-        				var day_of_week = month_first_date.format("e");
+        				var day_of_week = month_first_date.format("E") - 1;
         				
         				var days_count = month_first_date.add(1, "months").subtract(1, "days").format("D");
         				
@@ -1172,7 +1172,7 @@
         				
         				month_first_date.locale(options.language);
         			
-        				var day_of_week = month_first_date.format("e");	
+        				var day_of_week = month_first_date.format("E") - 1;
         				
         				var days_count = month_first_date.add(1, "months").subtract(1, "days").format("D");
         				
