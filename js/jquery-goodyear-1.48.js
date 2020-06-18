@@ -8,39 +8,29 @@
 	jQuery.fn.goodyear = function (options, methods_params) {
 
 		var init = function (element, options, methods_params) {
-
 			if ($(element).length > 1) {
-
 				$(element).each(function () {
-
 					if ($(this).is("input")) {
 						init_single(this, options, methods_params);
-					};
-
+					}
 				});
-
 			} else {
 				if ($(element).is("input")) {
 					return init_single(element, options, methods_params);
-				};
-
-			};
-
-		};
+				}
+			}
+		}
 
 		var init_single = function (element, options, methods_params) {
 
 			var goodyear_input = $(element);
-
 			var found_goodyear_id = false;
 
 			if (typeof (activated_goodyears_list) != "undefined")
 				$.each(activated_goodyears_list, function (index, value) {
-
 					if (value.element[0] == goodyear_input[0]) {
 						found_goodyear_id = index;
-					};
-
+					}
 				});
 
 			if (found_goodyear_id !== false) {
@@ -98,8 +88,8 @@
 									activated_goodyears_list[found_goodyear_id].states.container.addClass("goodyear-error");
 
 									activated_goodyears_list[found_goodyear_id].states.input_text_error = true;
-								};
-							};
+								}
+							}
 
 							activated_goodyears_list[found_goodyear_id].methods.set_date();
 
@@ -111,7 +101,7 @@
 								var format = methods_params;
 							} else {
 								var format = activated_goodyears_list[found_goodyear_id].options.format;
-							};
+							}
 
 							return activated_goodyears_list[found_goodyear_id].states.selected_date.format(format);
 
@@ -520,7 +510,6 @@
 				var methods = {
 
 					wrap_element: function (element) {
-
 						var container_template = $(templates.container()).clone();
 
 						switch ($(element).css("box-sizing")) {
@@ -584,19 +573,6 @@
 
 						states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
 
-						if (states.input_text_value == states.selected_date.format(options.visible_format)) {
-							states.container.removeClass("goodyear-error");
-
-							states.input_text_error = false;
-
-						} else {
-							if (states.input_text_value) {
-								states.container.addClass("goodyear-error");
-
-								states.input_text_error = true;
-							};
-						};
-
 						var is_mobile = new RegExp('mobile|android', "i");
 
 						states.is_mobile = is_mobile.test(navigator.userAgent);
@@ -604,7 +580,6 @@
 						/*
 							Устанавливаем позиции в календаре в соответствии с выбранной датой
 						*/
-
 						methods.set_date();
 
 						/*
@@ -617,11 +592,8 @@
 							Активируем возможность открыть и закрыть выбор даты
 						*/
 
-						if (!states.is_mobile) {
-
+						if (!states.is_mobile)
 							methods.show_and_hide_picker();
-
-						};
 
 						/*
 							Форматирование даты при уводе фокуса
@@ -690,7 +662,6 @@
 						methods.year_mousewheel();
 
 						if (options.hour_picker) {
-
 							/*
 								Подсветка часа при наведении
 							*/
@@ -716,7 +687,6 @@
 							methods.hour_mousewheel();
 
 							if (options.minute_picker) {
-
 								/*
 									Подсветка минуты при наведении
 								*/
@@ -741,9 +711,8 @@
 
 								methods.minute_mousewheel();
 
-							};
-
-						};
+							}
+						}
 
 						/*
 							Подсветка даты при наведении
@@ -779,9 +748,8 @@
 									//  Принудительно закрываем все уже открытые goodyears
 									//
 
-									if (goodyear_element.states.picker_open) {
+									if (goodyear_element.states.picker_open)
 										goodyear_element.states.container.find(".goodyear-hidden-text").triggerHandler("blur");
-									};
 
 									if (goodyear_element.states.drag_item)
 										drag_item = true;
@@ -789,7 +757,6 @@
 								});
 
 								if (!drag_item) {
-
 									$(".goodyear-picker").css("zIndex", 1);
 
 									$(".goodyear-picker").fadeOut(100);
@@ -799,8 +766,7 @@
 										goodyear_element.states.picker_open = false;
 
 									});
-
-								};
+								}
 
 							});
 
@@ -872,10 +838,8 @@
 							В результате изменения года меняем ситуацию в блоке с датами
 						*/
 
-						if (states.displayed_year != prev_displayed_year) {
-
+						if (states.displayed_year != prev_displayed_year)
 							methods.year_change_date_block_reaction();
-						};
 
 						/*
 							Устанавливаем значение в блоке выбора месяца
@@ -926,9 +890,8 @@
 							}
 						});
 
-						if (states.today.format("YYYY") == states.displayed_year) {
+						if (states.today.format("YYYY") == states.displayed_year)
 							date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[states.today.format("M") - 1]).find("span").filter("[date='" + states.today.format("D") + "']").addClass("today").append("<div class='bull'>&bull;</div>");
-						};
 
 						date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").filter(".active").addClass("prev_active");
 
@@ -941,7 +904,6 @@
 						*/
 
 						if (options.hour_picker) {
-
 							previous_selected_hour = states.selected_hour;
 
 							states.selected_hour = states.selected_date.hour();
@@ -966,15 +928,13 @@
 
 								}
 							});
-
-						};
+						}
 
 						/*
 							Если можно выбирать минуту
 						*/
 
 						if (options.minute_picker) {
-
 							previous_selected_minute = states.selected_minute;
 
 							states.selected_minute = Math.round(states.selected_date.minute() / options.minutes_step) * options.minutes_step;
@@ -999,8 +959,7 @@
 
 								}
 							});
-
-						};
+						}
 
 						/*
 							Вписываем значение в текстовое поле (на случай инвоука)
@@ -1016,9 +975,20 @@
 							states.container.find(".goodyear-hidden-text").val(states.input_hidden_text_value);
 
 							states.container.find(".goodyear-hidden-text").triggerHandler("change");
-						};
+						}
 
-						states.container.removeClass("goodyear-error");
+						if (states.input_text_value == states.selected_date.format(options.visible_format)) {
+							states.container.removeClass("goodyear-error");
+
+							states.input_text_error = false;
+
+						} else {
+							if (states.input_text_value) {
+								states.container.addClass("goodyear-error");
+
+								states.input_text_error = true;
+							}
+						}
 
 						/*
 							Устанавливаем такую же дату в связанных input'ax
@@ -1026,15 +996,10 @@
 						*/
 
 						if (options.range_from_id) {
-
 							if (typeof (activated_goodyears_list) != "undefined") {
-
 								if (activated_goodyears_list.length > 1) {
-
 									$.each(activated_goodyears_list, function (index, value) {
-
 										if (value.options.range_to_id == options.range_from_id) {
-
 											if (states.selected_date > value.states.selected_date) {
 												value.states.selected_date = states.selected_date;
 
@@ -1043,28 +1008,18 @@
 												value.states.input_hidden_text_value = states.selected_date.format(value.options.format);
 
 												value.methods.set_date();
-											};
-
-										};
-
+											}
+										}
 									});
-
-								};
-
-							};
-
-						};
+								}
+							}
+						}
 
 						if (options.range_to_id) {
-
 							if (typeof (activated_goodyears_list) != "undefined") {
-
 								if (activated_goodyears_list.length > 1) {
-
 									$.each(activated_goodyears_list, function (index, value) {
-
 										if (value.options.range_from_id == options.range_to_id) {
-
 											if (states.selected_date < value.states.selected_date) {
 												value.states.selected_date = states.selected_date;
 
@@ -1073,18 +1028,12 @@
 												value.states.input_hidden_text_value = states.selected_date.format(value.options.format);
 
 												value.methods.set_date();
-											};
-
-										};
-
+											}
+										}
 									});
-
-								};
-
-							};
-
-						};
-
+								}
+							}
+						}
 					},
 
 					/*
@@ -1111,8 +1060,7 @@
 								$(this).find(".goodyear-month").eq(parseInt(states.today.format("M"), 10) - 1).addClass("today");
 
 							});
-
-						};
+						}
 
 						states.container.find(".goodyear-date-picker").find(".goodyear-month").each(function () {
 
@@ -1181,30 +1129,25 @@
 										current_month_disabled = false;
 								} else {
 									date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").addClass("disabled");
-								};
+								}
 
 								if (day <= days_count) {
 									date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "inline");
 								} else {
 									date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-slide_line").find("[date='" + day + "']").css("display", "none");
-								};
+								}
 
 							};
 
 							if (current_month_disabled) {
-
 								date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").addClass("disabled");
 
 								month_picker.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).addClass("disabled");
-
 							} else {
-
 								date_slider.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).find(".goodyear-label").removeClass("disabled");
 
 								month_picker.find(".goodyear-month").filter(".goodyear-" + presets.months_en[month_num]).removeClass("disabled");
-
-							};
-
+							}
 						});
 
 					},
@@ -1227,7 +1170,7 @@
 								states.container.find(".goodyear-picker").addClass("position-right");
 							} else {
 								states.container.find(".goodyear-picker").removeClass("position-right");
-							};
+							}
 
 							$(".goodyear-picker").not(states.container.find(".goodyear-picker")).parent().css("zIndex", 1);
 
@@ -1245,15 +1188,13 @@
 								setTimeout(function () {
 									states.container.find(".goodyear-text")[0].select();
 								}, 1);
-							};
+							}
 
 						}).click(function () {
 
 							if (states.container.find(".goodyear-picker").css("display") != "block") {
-
 								$(this).trigger("focus");
-
-							};
+							}
 
 						});
 
@@ -1272,7 +1213,6 @@
 						states.container.find(".goodyear-text").keydown(function (event) {
 
 							if (event.which == 13) {
-
 								event.preventDefault();
 
 								states.container.find(".goodyear-text").trigger("change");
@@ -1282,11 +1222,9 @@
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
 								};
-
-							};
+							}
 
 							if (event.which == 9) {
-
 								states.container.find(".goodyear-text").trigger("change");
 
 								states.container.find(".goodyear-picker").css("zIndex", 1);
@@ -1294,8 +1232,7 @@
 								states.container.find(".goodyear-picker").fadeOut(100);
 
 								states.container.find(".goodyear-hidden-text").triggerHandler("blur");
-
-							};
+							}
 
 						}).keyup(function () {
 
@@ -1340,7 +1277,7 @@
 
 								states.container.removeClass("goodyear-error");
 								states.input_text_error = false;
-							};
+							}
 
 							states.container.find(".goodyear-hidden-text").triggerHandler("blur");
 
@@ -1408,27 +1345,19 @@
 
 									var month_slider_top = states.drag_start_element_top - difference_y;
 
-
-
 									if (month_slider_top < 0) {
-
 										//date_slider_month_slider_top = - Math.sqrt(Math.abs(month_slider_top)) / 2;
 
 										month_slider_top = 0;
-
-									};
+									}
 
 									if (month_slider_top > (block_model.month_block_height - block_model.month_slider_height)) {
-
 										//date_slider_month_slider_top = (block_model.month_block_height - block_model.month_slider_height) + Math.sqrt(Math.abs(month_slider_top - (block_model.month_block_height - block_model.month_slider_height))) / 2;
 
 										month_slider_top = (block_model.month_block_height - block_model.month_slider_height);
-
-
-									};
+									}
 
 									date_slider_month_slider_top = month_slider_top;
-
 
 									states.drag_item.css("top", month_slider_top);
 
@@ -1441,9 +1370,7 @@
 									date_slider.css("top", date_slider_top + "px");
 
 									date_slider.data("top", date_slider_top);
-
-								};
-
+								}
 							});
 
 						}).mouseenter(function () {
@@ -1461,7 +1388,6 @@
 							e.stopPropagation();
 
 							if (states.drag_item == month_slider) {
-
 								states.drag_item = null;
 
 								states.drag_start_pos_y = null;
@@ -1475,8 +1401,7 @@
 								$("html, body").removeClass("disable_selection");
 
 								return false;
-
-							};
+							}
 
 						});
 
@@ -1580,7 +1505,7 @@
 								return false;
 
 							});
-						};
+						}
 					},
 
 					/*
@@ -1732,12 +1657,9 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
-
-							};
-
+								}
+							}
 						});
-
 					},
 
 					/*
@@ -1745,7 +1667,6 @@
 					*/
 
 					year_drag: function () {
-
 						var year_picker = states.container.find(".goodyear-year-picker");
 
 						year_picker.stop(true, true);
@@ -1790,11 +1711,8 @@
 									year_picker.find(".goodyear-years-floating-block").data("top", year_picker_floating_block_top);
 
 									year_picker.find(".goodyear-current-year-selection").find(".goodyear-years-floating-block").css("top", year_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");
-
-								};
-
+								}
 							});
-
 						});
 
 						states.container.add(document).mouseup(function (e) {
@@ -1866,7 +1784,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 								states.drag_item = null;
 
@@ -1879,11 +1797,8 @@
 								$("html, body").removeClass("disable_selection");
 
 								return false;
-
-							};
-
+							}
 						});
-
 					},
 
 					/*
@@ -2034,7 +1949,7 @@
 
 								if (typeof (year_slider_stop) != "undefined" && !!year_slider_stop) {
 									clearTimeout(year_slider_stop);
-								};
+								}
 
 								year_slider_stop = setTimeout(function () {
 
@@ -2101,7 +2016,7 @@
 										setTimeout(function () {
 											states.container.find(".goodyear-text")[0].select();
 										}, 1);
-									};
+									}
 
 								}, 500
 								);
@@ -2180,7 +2095,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 							};
 
@@ -2213,7 +2128,6 @@
 							$("html, body").addClass("disable_selection");
 
 							$("html").mousemove(function (event) {
-
 								if (states.drag_item == hour_picker) {
 									states.drag_started = true;
 
@@ -2238,9 +2152,7 @@
 									hour_picker.find(".goodyear-hours-floating-block").data("top", hour_picker_floating_block_top);
 
 									hour_picker.find(".goodyear-current-hour-selection").find(".goodyear-hours-floating-block").css("top", hour_picker_floating_block_top - (block_model.year_selection_top + block_model.year_selection_border_top) + "px");
-
-								};
-
+								}
 							});
 						});
 
@@ -2249,7 +2161,6 @@
 							e.stopPropagation();
 
 							if (states.drag_item == hour_picker) {
-
 								states.selected_hour = Math.round(Math.abs((parseInt(hour_picker.find(".goodyear-hours-floating-block").css("top"), 10) - block_model.year_selection_top + block_model.year_selection_border_top) / block_model.single_year_item_height));
 
 								/*
@@ -2287,7 +2198,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 								states.drag_item = null;
 
@@ -2358,7 +2269,7 @@
 
 								if (typeof (hour_slider_stop) != "undefined" && !!hour_slider_stop) {
 									clearTimeout(hour_slider_stop);
-								};
+								}
 
 								hour_slider_stop = setTimeout(function () {
 
@@ -2403,7 +2314,7 @@
 										setTimeout(function () {
 											states.container.find(".goodyear-text")[0].select();
 										}, 1);
-									};
+									}
 
 								}, 500
 								);
@@ -2483,9 +2394,8 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
-
-							};
+								}
+							}
 
 						});
 
@@ -2590,7 +2500,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 								states.drag_item = null;
 
@@ -2706,7 +2616,7 @@
 										setTimeout(function () {
 											states.container.find(".goodyear-text")[0].select();
 										}, 1);
-									};
+									}
 
 								}, 500
 								);
@@ -2739,7 +2649,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 							};
 
@@ -2751,15 +2661,14 @@
 
 								if (states.picker_open) {
 									states.container.find(".goodyear-text").val(states.input_text_value);
-								};
+								}
 
 								if (!states.is_mobile) {
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
-
-							};
+								}
+							}
 
 						});
 
@@ -2775,24 +2684,17 @@
 
 						date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function () {
 
-							if (!$(this).hasClass("disabled")) {
+							if (!$(this).hasClass("disabled"))
 								states.container.removeClass("goodyear-error");
-							};
 
 						}).mouseleave(function () {
 
-							if (!$(this).hasClass("disabled")) {
-
-								if (states.input_text_error) {
+							if (!$(this).hasClass("disabled"))
+								if (states.input_text_error)
 									states.container.addClass("goodyear-error");
-								};
-
-							};
 
 						}).click(function () {
-
 							if (!$(this).hasClass("disabled")) {
-
 								states.container.removeClass("goodyear-error");
 
 								states.input_text_error = false;
@@ -2812,7 +2714,7 @@
 									setTimeout(function () {
 										states.container.find(".goodyear-text")[0].select();
 									}, 1);
-								};
+								}
 
 								states.container.find(".goodyear-picker").css("zIndex", 1);
 
@@ -2821,9 +2723,7 @@
 								states.picker_open = false;
 
 								states.container.find(".goodyear-hidden-text").triggerHandler("blur");
-
-							};
-
+							}
 						});
 
 					},
@@ -2846,8 +2746,8 @@
 
 							if (parsed_date.isValid()) {
 								break;
-							};
-						};
+							}
+						}
 
 						for (i = 0; i < presets.common_date_langs.length; i++) {
 							var parsed_date = moment(methods.trim(string), options.visible_format, presets.common_date_langs[i], true);
@@ -2856,37 +2756,32 @@
 
 							if (parsed_date.isValid()) {
 								break;
-							};
-						};
+							}
+						}
 
 						if (!parsed_date.isValid()) {
 
 							for (k = 0; k < presets.common_date_formats.length; k++) {
 								for (i = 0; i < presets.common_date_langs.length; i++) {
-									var parsed_date = moment(methods.trim(string), presets.common_date_formats[k], presets.common_date_langs[i], (k < 2));
+									var parsed_date = moment(methods.trim(string), presets.common_date_formats[k], presets.common_date_langs[i], true);
 
 									parsed_date.locale(options.language);
 
-									if (parsed_date.isValid()) {
+									if (parsed_date.isValid())
 										break;
-									};
-								};
+								}
 
-								if (parsed_date.isValid()) {
+								if (parsed_date.isValid())
 									break;
-								};
-							};
-
-						};
+							}
+						}
 
 						if (parsed_date.isValid()) {
 							return parsed_date;
 						} else {
 							return false;
-						};
-
+						}
 					}
-
 				};
 
 				/*
@@ -2895,7 +2790,7 @@
 
 				if (typeof (goodyear_input.data("goodyearLanguage")) != "undefined" && goodyear_input.data("goodyearLanguage") == "ru" || goodyear_input.data("goodyearLanguage") == "en") {
 					options.language = goodyear_input.data("goodyearLanguage");
-				};
+				}
 
 				options = $.extend({
 
@@ -2907,56 +2802,56 @@
 					options.no_icon = true;
 				} else {
 					options.no_icon = false;
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearRangeFrom")) != "undefined" && goodyear_input.data("goodyearRangeFrom")) {
 					options.range_from_id = parseInt(goodyear_input.data("goodyearRangeFrom"), 10);
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearRangeTo")) != "undefined" && goodyear_input.data("goodyearRangeTo")) {
 					options.range_to_id = parseInt(goodyear_input.data("goodyearRangeTo"), 10);
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearFormat")) != "undefined" && goodyear_input.data("goodyearFormat")) {
 					options.format = goodyear_input.data("goodyearFormat");
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearVisibleFormat")) != "undefined" && goodyear_input.data("goodyearVisibleFormat")) {
 					options.visible_format = goodyear_input.data("goodyearVisibleFormat");
 				} else
 					if (typeof (goodyear_input.data("goodyearFormat")) != "undefined" && goodyear_input.data("goodyearFormat")) {
 						options.visible_format = goodyear_input.data("goodyearFormat");
-					};
+					}
 
 				if (typeof (goodyear_input.data("goodyearMinYear")) != "undefined" && goodyear_input.data("goodyearMinYear")) {
 					options.min_year = goodyear_input.data("goodyearMinYear");
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearMaxYear")) != "undefined" && goodyear_input.data("goodyearMaxYear")) {
 					options.max_year = goodyear_input.data("goodyearMaxYear");
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearMinDate")) != "undefined" && goodyear_input.data("goodyearMinDate")) {
 					options.min_date = goodyear_input.data("goodyearMinDate");
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearMaxDate")) != "undefined" && goodyear_input.data("goodyearMaxDate")) {
 					options.max_date = goodyear_input.data("goodyearMaxDate");
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearHourPicker")) != "undefined" && goodyear_input.data("goodyearHourPicker")) {
 					options.hour_picker = (goodyear_input.data("goodyearHourPicker") ? true : false);
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearMinutePicker")) != "undefined" && goodyear_input.data("goodyearMinutePicker")) {
 					options.minute_picker = (goodyear_input.data("goodyearMinutePicker") ? true : false);
-				};
+				}
 
 				if (typeof (goodyear_input.data("goodyearMinutesStep")) != "undefined" && goodyear_input.data("goodyearMinutesStep")) {
 					options.minutes_step = (goodyear_input.data("goodyearMinutesStep") ? goodyear_input.data("goodyearMinutesStep") : 5);
 
 					options.minutes_step = 60 / Math.floor(60 / options.minutes_step);
-				};
+				}
 
 				if (options.minute_picker)
 					options.hour_picker = true;
@@ -3013,9 +2908,7 @@
 					*/
 
 					options.min_date = methods.string_to_date(options.min_year + "-01-01");
-				};
-
-
+				}
 
 				options.max_date = methods.string_to_date(options.max_date);
 
@@ -3048,14 +2941,14 @@
 						options.max_year = parseInt(selected_date.format("YYYY"), 10) + 50;
 					} else {
 						options.max_year = parseInt(states.today.format("YYYY"), 10) + 50;
-					};
+					}
 
 					/*
 						Макс. дату берем от конца максимального года
 					*/
 
 					options.max_date = methods.string_to_date(options.max_year + "-01-01").endOf("year");
-				};
+				}
 
 				/*
 					Если распарсилось и попадает в диапазон
@@ -3095,8 +2988,7 @@
 					states.selected_date = options.min_date;
 					states.input_text_value = goodyear_input.val();
 					states.input_hidden_text_value = goodyear_input.val();
-
-				};
+				}
 
 				/*
 					Устанавливаем время
@@ -3115,7 +3007,7 @@
 
 				if (jQuery().mousewheel) {
 					states.mousewheel = true;
-				};
+				}
 
 				/*
 					Реакции всего документа на некоторые действия: отпускание мыши, клик в стороне
@@ -3136,10 +3028,8 @@
 				methods.document_actions();
 
 				return goodyear_input;
-
-			};
-
-		};
+			}
+		}
 
 		return init(this, options, methods_params);
 
@@ -3147,7 +3037,6 @@
 })(jQuery);
 
 $(document).ready(function () {
-
 	var is_goodyear_script = new RegExp('^.*?goodyear[^/]*?$', "i");
 
 	var find_script_path = new RegExp('^(.*?)[^/]*?$', "i");
@@ -3157,30 +3046,24 @@ $(document).ready(function () {
 	var script_block = false;
 
 	$("script").filter("[src*='goodyear']").each(function () {
-
 		if (is_goodyear_script.test($(this).attr("src"))) {
 			script_path = find_script_path.exec($(this).attr("src"))[1];
 
 			script_block = $(this);
-		};
-
+		}
 	});
 
 	if (script_path)
-		if (typeof (moment) == "undefined") {
+		if (typeof (moment) == "undefined")
 			$("<script src='" + script_path + "moment-with-langs-2.17.1.min.js'></script>").insertAfter(script_block);
-		};
 
 	if (script_path)
-		if (!jQuery().mousewheel) {
+		if (!jQuery().mousewheel)
 			$("<script src='" + script_path + "jquery-mousewheel-3.1.11.min.js'></script>").insertAfter(script_block);
-		};
 
 	if (script_path)
-		if (!jQuery().actual) {
+		if (!jQuery().actual)
 			$("<script src='" + script_path + "jquery.actual.min.js'></script>").insertAfter(script_block);
-		};
 
 	$(".goodyear").goodyear();
-
 });
