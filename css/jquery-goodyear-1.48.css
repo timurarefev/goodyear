@@ -52,16 +52,55 @@
 	width:17px;
 	height:13px;
 	right:5px;
-	top:0px;
-	height:100%;
-	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDE3IDEzIj48cGF0aCBkPSJNNCAwdjRIMHY5aDEzVjloNFYwSDR6bTAgMTJIMVY5aDN2M3ptMC00SDFWNWgzdjN6bTQgNEg1VjloM3Yzem0wLTRINVY1aDN2M3ptMC00SDVWMWgzdjN6bTQgOEg5VjloM3Yzem0wLTRIOVY1aDN2M3ptMC00SDlWMWgzdjN6bTQgNGgtM1Y1aDN2M3ptMC00aC0zVjFoM3YzeiIvPjxwYXRoIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0ibm9uZSIgZD0iTTAgMGgxN3YxM0gweiIvPjwvc3ZnPg==);
+	top:50%;
+	margin-top: -6.5px;
+	height: 13px;
 	background-position:left center;
 	background-repeat:no-repeat;
 	cursor:pointer;
 }
 
-.goodyear-container .goodyear-icon.hover{
-	background-position:right center;
+.goodyear-container .goodyear-icon div{
+	content: "";
+	display: block;
+	box-sizing: border-box;
+	border-width: 1px;
+	border-style: solid;
+	width: 9px;
+	height: 9px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.goodyear-container .goodyear-icon div:nth-child(2){
+	top: auto;
+	right: auto;
+	bottom: 0px;
+	left: 0px;
+}
+
+.goodyear-container .goodyear-icon div:nth-child(3){
+	height: 13px;
+	width: 9px;
+	left: 4px;
+	top: 0px;
+}
+
+.goodyear-container .goodyear-icon div:nth-child(4){
+	height: 5px;
+	width: 17px;
+	left: 0px;
+	top: 4px;
+}
+
+.goodyear-container .goodyear-icon div{
+	border-color: #999;
+	transition: border-color 200ms linear;
+}
+
+.goodyear-container .goodyear-icon.hover div{
+	border-color: #000;
 }
 
 .goodyear-container .goodyear-picker{

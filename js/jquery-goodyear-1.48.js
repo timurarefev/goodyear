@@ -176,7 +176,7 @@
 
 						return "\
         			<div class='goodyear-container'>\
-        			" + (!options.no_icon ? "<div class='goodyear-icon'></div>" : "") + "\
+        			" + (!options.no_icon ? "<div class='goodyear-icon'><div></div><div></div><div></div><div></div></div>" : "") + "\
         			<div class='goodyear-picker"+ (options.hour_picker ? " goodyear-add-hour-picker" : "") + (options.minute_picker ? " goodyear-add-minute-picker" : "") + "'>\
         				<div class='goodyear-date-picker'>\
         					<div class='goodyear-slider'>\
