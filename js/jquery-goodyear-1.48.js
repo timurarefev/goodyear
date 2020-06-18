@@ -1624,7 +1624,7 @@
 
 								var selected_date = moment([states.displayed_year, parseInt(states.selected_date.format("M"), 10) - 1, parseInt((states.selected_date.format("M") == 2) && (states.selected_date.format("D") == 29) ? 28 : states.selected_date.format("D"), 10), parseInt(states.selected_date.format("H"), 10), parseInt(states.selected_date.format("m"), 10), parseInt(states.selected_date.format("s"), 10)]);
 
-								current_date.locale(options.language);
+								selected_date.locale(options.language);
 
 								states.input_text_value = selected_date.format(options.visible_format);
 
