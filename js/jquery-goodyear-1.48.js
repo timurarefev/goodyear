@@ -6,7 +6,6 @@
 
 (function ($) {
 	jQuery.fn.goodyear = function (options, methods_params) {
-
 		var init = function (element, options, methods_params) {
 			if ($(element).length > 1) {
 				$(element).each(function () {
@@ -80,12 +79,14 @@
 
 							if (activated_goodyears_list[found_goodyear_id].states.input_text_value == activated_goodyears_list[found_goodyear_id].states.selected_date.format(activated_goodyears_list[found_goodyear_id].options.visible_format)) {
 								activated_goodyears_list[found_goodyear_id].states.container.removeClass("goodyear-error");
+								activated_goodyears_list[found_goodyear_id].states.container.find(".goodyear-hidden-text").removeClass("goodyear-text-error");
 
 								activated_goodyears_list[found_goodyear_id].states.input_text_error = false;
 
 							} else {
 								if (activated_goodyears_list[found_goodyear_id].states.input_text_value) {
 									activated_goodyears_list[found_goodyear_id].states.container.addClass("goodyear-error");
+									activated_goodyears_list[found_goodyear_id].states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
 									activated_goodyears_list[found_goodyear_id].states.input_text_error = true;
 								}
@@ -727,7 +728,6 @@
 						methods.date_pick();
 
 						return element;
-
 					},
 
 					document_actions: function () {
@@ -978,15 +978,14 @@
 
 						if (states.input_text_value == states.selected_date.format(options.visible_format)) {
 							states.container.removeClass("goodyear-error");
+							states.container.find(".goodyear-hidden-text").removeClass("goodyear-text-error");
 
 							states.input_text_error = false;
+						} else if (states.input_text_value) {
+							states.container.addClass("goodyear-error");
+							states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
-						} else {
-							if (states.input_text_value) {
-								states.container.addClass("goodyear-error");
-
-								states.input_text_error = true;
-							}
+							states.input_text_error = true;
 						}
 
 						/*
@@ -1266,6 +1265,7 @@
 								)
 							) {
 								states.container.addClass("goodyear-error");
+								states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
 								states.input_text_error = true;
 							} else {
@@ -1275,6 +1275,8 @@
 								methods.set_date();
 
 								states.container.removeClass("goodyear-error");
+								states.container.find(".goodyear-hidden-text").removeClass("goodyear-text-error");
+
 								states.input_text_error = false;
 							}
 
@@ -1641,6 +1643,7 @@
 									)
 								) {
 									states.container.addClass("goodyear-error");
+									states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
 									states.input_text_error = true;
 
@@ -1768,6 +1771,7 @@
 									)
 								) {
 									states.container.addClass("goodyear-error");
+									states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
 									states.input_text_error = true;
 
@@ -2000,6 +2004,7 @@
 										)
 									) {
 										states.container.addClass("goodyear-error");
+										states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
 
 										states.input_text_error = true;
 
@@ -2683,18 +2688,23 @@
 
 						date_slider.find(".goodyear-month").find(".goodyear-slide_line").find("span").mousedown(function () {
 
-							if (!$(this).hasClass("disabled"))
+							if (!$(this).hasClass("disabled")) {
 								states.container.removeClass("goodyear-error");
+								states.container.find(".goodyear-hidden-text").removeClass("goodyear-text-error");
+							}
 
 						}).mouseleave(function () {
 
 							if (!$(this).hasClass("disabled"))
-								if (states.input_text_error)
+								if (states.input_text_error) {
 									states.container.addClass("goodyear-error");
+									states.container.find(".goodyear-hidden-text").addClass("goodyear-text-error");
+								}
 
 						}).click(function () {
 							if (!$(this).hasClass("disabled")) {
 								states.container.removeClass("goodyear-error");
+								states.container.find(".goodyear-hidden-text").removeClass("goodyear-text-error");
 
 								states.input_text_error = false;
 
@@ -3031,7 +3041,6 @@
 		}
 
 		return init(this, options, methods_params);
-
 	};
 })(jQuery);
 
