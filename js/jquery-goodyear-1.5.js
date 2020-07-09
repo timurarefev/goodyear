@@ -758,7 +758,7 @@
 								if (!drag_item) {
 									$(".goodyear-picker").css("zIndex", 1);
 
-									//$(".goodyear-picker").fadeOut(100);
+									$(".goodyear-picker").fadeOut(100);
 
 									$.each(activated_goodyears_list, function (index, goodyear_element) {
 
@@ -1172,7 +1172,7 @@
 
 							$(".goodyear-picker").not(states.container.find(".goodyear-picker")).parent().css("zIndex", 1);
 
-							//$(".goodyear-picker").not(states.container.find(".goodyear-picker")).fadeOut(100);
+							$(".goodyear-picker").not(states.container.find(".goodyear-picker")).fadeOut(100);
 
 							states.container.css("zIndex", 2);
 
@@ -1227,7 +1227,7 @@
 
 								states.container.find(".goodyear-picker").css("zIndex", 1);
 
-								//states.container.find(".goodyear-picker").fadeOut(100);
+								states.container.find(".goodyear-picker").fadeOut(100);
 
 								states.container.find(".goodyear-hidden-text").triggerHandler("blur");
 							}
@@ -2727,7 +2727,7 @@
 
 								states.container.find(".goodyear-picker").css("zIndex", 1);
 
-								//states.container.find(".goodyear-picker").fadeOut(100);
+								states.container.find(".goodyear-picker").fadeOut(100);
 
 								states.picker_open = false;
 
