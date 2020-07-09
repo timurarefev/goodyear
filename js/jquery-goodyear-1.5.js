@@ -565,7 +565,7 @@
 
 						states.container = element.parent();
 
-						visible_element.removeAttr("name").removeClass("goodyear").addClass("goodyear-text");
+						visible_element.removeAttr("name").removeClass("goodyear").removeAttr('id').addClass("goodyear-text");
 
 						visible_element.prependTo(states.container);
 
